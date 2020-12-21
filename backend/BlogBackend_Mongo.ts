@@ -167,7 +167,7 @@ export abstract class ServerAuth {
         });
     }
 
-    private static encryptText(input: string): string {
+    public static encryptText(input: string): string {
 
         if(this.tokenStore.getNonce() === undefined) throw new Error(`Nonce is undefined.`);
 
@@ -192,7 +192,7 @@ export abstract class ServerAuth {
         // return key;
     }
 
-    private static decryptText(input: string): string {
+    public static decryptText(input: string): string {
 
         if(this.tokenStore.getNonce() === undefined) throw new Error(`Nonce is undefined.`);
 
