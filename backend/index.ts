@@ -20,6 +20,8 @@ let childProcess = require('child_process');
 let selfserve_config = require(`${process.cwd()}/../site.config`);
 //#endregion
 
+DebugConsole.Writeq(`Our port is ${selfserve_config.selfserve.hostPort}`);
+
 const cms: Selfserve = new Selfserve(selfserve_config.selfserve.hostPort);
 
 /**
