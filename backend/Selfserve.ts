@@ -34,7 +34,7 @@ export default class Selfserver {
         ServiceCalendarBackend.init();
     }
     
-    constructor(_port: number = 3000, _backupPort: number = 8000, _staticDirectory: string = `${process.cwd()}/build/public_html/`) 
+    constructor(_port: number, _backupPort: number, _staticDirectory: string = `${process.cwd()}/build/public_html/`) 
     {
         this.port = _port;
         this.backupPort = _backupPort;
