@@ -43,7 +43,19 @@ class InteractiveConsole {
             },
             require: () => { },
             console: console,
-            exit: () => process.exit(0)
+            dbg_n: () => {
+                let a = require('./TokenStore');
+                return a.getNonce();
+            },
+            exit: () => process.exit(0),
+            decrypt: (input) => {
+                let a = require('./BlogBackend_Mongo');
+                return a.decryptText(input);
+            },
+            encrypt: (input) => {
+                let a = require('./BlogBackend_Mongo');
+                return a.encryptText(input);
+            }
         };
         this.inputIndicator = "\n> ";
         this.lastErr = undefined;
