@@ -1,0 +1,5 @@
+
+
+
+
+npm --prefix ./selfserve/ "$@"
