@@ -26,6 +26,7 @@ module.exports = {
   },
   selfserve: {
     hostPort: 8001,
+    backupHostPort: 8001,
 
     /**MongoDB Credentials */
     username: 'admin',
