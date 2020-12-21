@@ -10,9 +10,10 @@ module.exports = {
     basePath: process.env.NODE_ENV === 'production' ? '/nanogen' : '',
 
     /**
-     * baseURL can be substituted in your template preconfigure your base URL.
+     * baseURL can be substituted in your template preconfigure your base URL. 
      */
-    baseURL: 'https://vsatresq.com/',
+    // baseURL: 'https://vsatresq.com/',
+    baseURL: 'http://localhost:8000/',
 
     /**
      * The default layout file name
@@ -21,7 +22,7 @@ module.exports = {
   },
   build: {
     srcPath: '../frontend',
-    outputPath: process.env.NODE_ENV === 'production' ? './docs' : './selfserve/build/public_html'
+    outputPath: process.env.NODE_ENV === 'production' ? './docs' : './build/public_html'
   },
   selfserve: {
 
@@ -42,6 +43,10 @@ module.exports = {
     full_chain_path: './vsatresq.com/fullchain1.pem',
     priv_key_path: './vsatresq.com/privkey1.pem',
     ca_path: './vsatresq.com/fullchain1.pem',
-    cert_path: './vsatresq.com/cert1.pem'
+    cert_path: './vsatresq.com/cert1.pem',
+    calendar: {
+      google_client_id: '890936756080-jotv0tadvgavbir7dof154dga1n3sts8.apps.googleusercontent.com',
+      google_client_secret: 'QyykaHqdqPCJK_dv5WML8UCb'
+    }
   }
 };
