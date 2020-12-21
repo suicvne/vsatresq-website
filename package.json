@@ -1,15 +1,15 @@
 {
   "name": "selfserve",
-  "version": "1.0.1-psychcat",
+  "version": "1.3.0",
   "description": "Easy setup CMS.",
   "main": "Selfserve.ts",
   "scripts": {
     "tswatch": "tsc -w",
     "build-all": "tsc && npm run-script build",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "mkdir -p build/ && node ./scripts/build.js",
-    "serve": "node build/backend/",
-    "clean": "rm -rf public/",
+    "build": "mkdir -p ./selfserve/build/ && node ./selfserve/scripts/build.js",
+    "serve": "node ./selfserve/build/selfserve/backend/",
+    "clean": "rm -rf ./selfserve/build/",
     "mongo-test-server": "mkdir -p './testing/mongodb/data/db' && mongod --dbpath './testing/mongodb/data/db'"
   },
   "author": "Mike Santiago (axiom@ignoresolutions.xyz)",
