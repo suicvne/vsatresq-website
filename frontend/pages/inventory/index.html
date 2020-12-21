@@ -119,8 +119,11 @@ layout: "inv_template"
         $("#subdb_select").change((eventData) => {
             let newSubDbName = $("#subdb_select option:selected").val();
             let params = {subdb: newSubDbName};
-            
-            window.history.pushState(newSubDbName, `${newSubDbName} Inventory - VSAT ResQ`, `/inventory/?subdb=${newSubDbName}`);
+
+            if(newSubDbName !== 'new_subdb')
+            {
+                window.history.pushState(newSubDbName, `${newSubDbName} Inventory - VSAT ResQ`, `/inventory/?subdb=${newSubDbName}`);
+            }
 
             subdbSelectionChanged(newSubDbName);
         });
