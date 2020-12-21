@@ -18,7 +18,7 @@ const router: Router = Router();
 router.get('/cdn', (req: Request, res: Response) => {
     var fileName: string = <string>req.query.filename;
     var noDownload: Number = (req.query.nodl !== undefined ? Number.parseInt(<string>req.query.nodl) : 0);
-    let file = `${process.cwd()}/data/shop/item_files/${fileName}`;
+    let file = `${process.cwd()}/../data/shop/item_files/${fileName}`;
     let idx = fileName.indexOf('.');
     let type = fileName.substring(++idx);
     let fs = require('fs');
@@ -54,7 +54,7 @@ router.post('/cdn', (req: Request, res: Response) => {
     const fileName = GenerateRandomName(16);
     const base64DataOnly = __base64.split(',')[1];
 
-    let filePath = `${process.cwd()}/data/shop/item_files`;
+    let filePath = `${process.cwd()}/../data/shop/item_files`;
 
     let fullDestinationPath = `${filePath}/${fileName}.${extension}`;
 
@@ -185,7 +185,7 @@ router.post('/get_order', (req: Request, res: Response) => {
 
 router.get('/item_image', (req: Request, res: Response) => {
     let fileName = <string>req.query.name;
-    let file = `${process.cwd()}/data/shop/item_images/${fileName}`;
+    let file = `${process.cwd()}/../data/shop/item_images/${fileName}`;
     let idx = fileName.indexOf('.'); 
     let type = fileName.substring(++idx);
     console.log('getting file of type ' + type);
@@ -209,7 +209,7 @@ router.post('/upload_item_image', (req: Request, res: Response) => {
     let uploadedData = req.body.item_image;
     let extension = req.body.extension;
     let fileName = GenerateRandomName(6);
-    let filePath = `${process.cwd()}/data/shop/item_images`;
+    let filePath = `${process.cwd()}/../data/shop/item_images`;
     let fullFilePath = `${filePath}/${fileName}${extension}`;
     let finalURL = `${Endpoint}/item_image?name=${fileName}${extension}`;
     const base64Data = uploadedData.split(',')[1];

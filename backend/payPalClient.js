@@ -1,5 +1,5 @@
 'use strict';
-const config = require(`${process.cwd()}/site.config`).selfserve;
+const config = require(`${process.cwd()}/../site.config`).selfserve;
 /**
  *
  * PayPal Node JS SDK dependency

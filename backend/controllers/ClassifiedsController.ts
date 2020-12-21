@@ -12,7 +12,7 @@ const router: Router = Router();
 
 router.get('/cdn', (req: Request, res: Response) => {
     var fileName: string = <string>req.query.name;
-    let file = `${process.cwd()}/data/classifieds/images/${fileName}`;
+    let file = `${process.cwd()}/../data/classifieds/images/${fileName}`;
     let idx = fileName.indexOf('.');
     let type = fileName.substring(++idx);
     DebugConsole.Writeq('Classifieds getting file of type ' + type);
@@ -38,7 +38,7 @@ router.post('/cdn', (req: Request, res: Response) => {
     let fileName = shop._GenerateRandomName(16);
     let finalURL = `${Endpoint}/cdn?name=${fileName}${extension}`;
 
-    let filePath = `${process.cwd()}/data/classifieds/images`;
+    let filePath = `${process.cwd()}/../data/classifieds/images`;
     let fullDestinationPath = `${filePath}/${fileName}${extension}`;
     
     let fs = require('fs');

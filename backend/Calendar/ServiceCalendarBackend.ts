@@ -5,7 +5,7 @@ import {IOrderNote} from '../Shop/Order';
 import {GoogleCalendarBackend} from '../Calendar/GoogleCalendarBackend';
 import * as fs from 'fs';
 
-let config = require(`${process.cwd()}/site.config`).selfserve;
+let config = require(`${process.cwd()}/../site.config`).selfserve;
 
 export interface IServiceCalendarEntry {
     Name: string;
@@ -54,7 +54,7 @@ export abstract class ServiceCalendarBackend {
     private static mongoBackend: MongoDBInstance;
     public static BackendAvailable: boolean = false;
     private static GCalReflectionID: string | undefined = undefined;
-    private static GCalReflectionIDStorePath: string = `${process.cwd()}/data/gcalreflectionid`;
+    private static GCalReflectionIDStorePath: string = `${process.cwd()}/../data/gcalreflectionid`;
     private static ServiceCalendarCollection: string = "service_calendar";
     
 

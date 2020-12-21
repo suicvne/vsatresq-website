@@ -74,9 +74,16 @@ router.get('/avatar', (req: any, res: any) => {
 
     // TODO: all of this...
     const _username = req.query.username;
+
+    if(_username === undefined || _username.length === 0)
+    {
+        res.status(404).send();
+        return;
+    }
+
     const fs = require('fs');
 
-    let dir = './data/images/avatar';
+    let dir = `${process.cwd()}/../data/images/avatar`;
     let user = `${dir}/${_username}.png`;
     let _default = `${process.cwd()}/build/public_html/images/avatar/default.png`;
 
@@ -352,13 +359,15 @@ router.get('/getpost', (req: any, res: any) => {
         DebugConsole.Writeq('Get post by ID');
         ServerAuth.getPostByID(postID, res, (err: any, resultingPost: any) => {
 
-            if (err || resultingPost === undefined) {
+            if (err && resultingPost === undefined) {
                 DebugConsole.Writeq(`Error while retrieving post.`);
-                res.status(404).send(resultingPost);
+                res.status(400).send(resultingPost);
+                return;
             }
             else {
-                DebugConsole.Write(resultingPost);
+                DebugConsole.Writeq(`Post found successfully.`);
                 res.status(200).send(JSON.stringify(resultingPost));
+                return;
             }
         });
         return;

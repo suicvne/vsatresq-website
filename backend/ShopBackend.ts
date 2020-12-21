@@ -5,7 +5,7 @@ import { ObjectID } from "mongodb";
 import { IShopItem, ShopItem, CartItem } from "./Shop/ShopItem"
 import { DebugConsole } from "./Debug";
 import { Order } from "./Shop/Order";
-var config = require(`${process.cwd()}/site.config`).selfserve;
+var config = require(`${process.cwd()}/../site.config`).selfserve;
 
 export abstract class ShopBackend 
 {

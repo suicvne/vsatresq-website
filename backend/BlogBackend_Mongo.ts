@@ -8,7 +8,7 @@ import { DebugConsole, DebugSeverity } from "./Debug";
 
 import { ObjectId } from 'mongodb';
 
-var config = require(`${process.cwd()}/site.config`).selfserve;
+var config = require(`${process.cwd()}/../site.config`).selfserve;
 
 let crypto = require('crypto'),
     crypto_method = 'aes-256-cbc';
@@ -239,7 +239,18 @@ export abstract class ServerAuth {
             if (qresult.username === username) userMatches = true;
 
             let encrypted_pass = qresult.password;
-            let decrypted_pass = ServerAuth.decryptText(qresult.password);
+            let decrypted_pass = "";
+            try
+            {
+                decrypted_pass = ServerAuth.decryptText(qresult.password);
+            }
+            catch
+            {
+                DebugConsole.Write(DebugSeverity.WARNING, `Unable to decrypt ${qresult.password}`);
+                res.status(400).send(`Unable to decrypt.`);
+
+                return;
+            }
             let actual_pass = decrypted_pass.substring(decrypted_pass.indexOf('|') + 1);
 
             if (actual_pass === password) passMatches = true;
@@ -255,6 +266,7 @@ export abstract class ServerAuth {
                 console.log("(BlogBackend/doLogin) error handling for: ", qerr);
                 if (qerr === undefined) {
                     if (!passMatches) {
+                        DebugConsole.Writeq(`${decrypted_pass} !== ${actual_pass}`);
                         res.status(400).send('Credential mismatch.');
                         callback(MongoDBStatus.Error, "Credential mismatch");
                     }
@@ -367,18 +379,20 @@ export abstract class ServerAuth {
                     callback(true, "The post with the corresponding post ID could not be found. The post may have been deleted.");
                 }
                 else {
-                    DebugConsole.Write(resultingPost);
                     if (resultingPost) {
-                        DebugConsole.Writeq(JSON.stringify(resultingPost));
                         DebugConsole.Write(DebugSeverity.DEBUG, "now querying for author with username ", resultingPost.author.username);
                         this.mongoBackend.query(UsersCollection, "username", resultingPost.author.username.trim(), (err: any, userPosting: any) => {
-                            if (err) throw err;
-                            if (userPosting) {
-                                resultingPost.author = userPosting;
-                                callback(undefined, resultingPost);
+                            if (err)
+                            {
+                                callback(err, resultingPost);
+                                return;
                             }
                             else
-                                callback(true, 'User posted not found');
+                            {
+                                resultingPost.author = userPosting;
+                                callback(undefined, resultingPost);
+                                return;
+                            }
                         });
                     }
                 }

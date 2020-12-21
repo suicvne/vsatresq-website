@@ -13,7 +13,7 @@ var DB = require('mongodb').Db,
     MongoClient = mongo,
     Server = require('mongodb').Server;
 
-var config = require(`${process.cwd()}/site.config`).selfserve;
+var config = require(`${process.cwd()}/../site.config`).selfserve;
 
 export class MongoDBInstance {
 
