@@ -120,12 +120,16 @@ layout: "inv_template"
             let newSubDbName = $("#subdb_select option:selected").val();
             let params = {subdb: newSubDbName};
 
-            if(newSubDbName !== 'new_subdb')
+            if(newSubDbName !== 'new_subdb' 
+                & newSubDbName !== undefined 
+                & newSubDbName !== 'undefined')
             {
                 window.history.pushState(newSubDbName, `${newSubDbName} Inventory - VSAT ResQ`, `/inventory/?subdb=${newSubDbName}`);
+                if(newSubDbName === 'new_subdb')
+                {
+                    subdbSelectionChanged(newSubDbName);
+                }   
             }
-
-            subdbSelectionChanged(newSubDbName);
         });
 
         $("#new_item_serial").keyup(() => {
