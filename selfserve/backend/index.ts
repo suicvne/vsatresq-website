@@ -17,9 +17,10 @@ import * as ServiceCalendarController from './controllers/ServiceCalendarControl
 
 let fs = require('fs');
 let childProcess = require('child_process');
+let selfserve_config = require('../site.config');
 //#endregion
 
-const cms: Selfserve = new Selfserve();
+const cms: Selfserve = new Selfserve(selfserve_config.selfserve.hostPort);
 
 /**
  * Modify this array to add more routes/endpoints to Express.
