@@ -23,7 +23,19 @@ export class InteractiveConsole {
         },
         require: () => {/**u tried */},
         console: console,
-        exit: () => process.exit(0)
+        dbg_n: () => {
+            let a = require('./TokenStore');
+            return a.getNonce();
+        },
+        exit: () => process.exit(0),
+        decrypt: (input: any) => {
+            let a = require('./BlogBackend_Mongo');
+            return a.decryptText(input);
+        },
+        encrypt: (input: any) => {
+            let a = require('./BlogBackend_Mongo');
+            return a.encryptText(input);
+        }
     };
 
     public inputIndicator: string = "\n> ";
