@@ -12,6 +12,8 @@
 import * as ts from 'typescript'
 import { DebugConsole, DebugSeverity } from "./Debug";
 
+import {ServerAuth} from './BlogBackend_Mongo';
+
 const vm = require('vm')
 
 export class InteractiveConsole {
@@ -23,18 +25,12 @@ export class InteractiveConsole {
         },
         require: () => {/**u tried */},
         console: console,
-        dbg_n: () => {
-            let a = require('./TokenStore');
-            return a.getNonce();
-        },
         exit: () => process.exit(0),
         decrypt: (input: any) => {
-            let a = require('./BlogBackend_Mongo');
-            return a.decryptText(input);
+            return ServerAuth.decryptText(input);
         },
         encrypt: (input: any) => {
-            let a = require('./BlogBackend_Mongo');
-            return a.encryptText(input);
+            return ServerAuth.encryptText(input);
         }
     };
 
