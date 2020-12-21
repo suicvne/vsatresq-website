@@ -1,0 +1,118 @@
+---
+layout: "new_template"
+---
+
+<style>
+    .registration_successful {
+        display: none;
+    }
+
+    .registration_failed {
+        display: none;
+    }
+</style>
+
+<script>
+
+    document.title = "Register - Psych Cat"
+
+    const setRegisterFormVisible = (visible) => (visible ? $("#registration_form").show() : $("#registration_form").hide());
+
+    const registrationSuccessful = () => {
+        setRegisterFormVisible(false);
+        $(".registration_successful").css("display", "block");
+    };
+
+    const registrationFailed = (failMessage) => {
+        console.log('registeration FAILED', failMessage);
+
+        setRegisterFormVisible(false);
+        $(".registration_failed").find("#cause").html(failMessage);
+        $(".registration_failed").css("display", "block");
+    }
+
+    const validateEmail = (email) => {
+        var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(email);
+    }
+
+    const validation = () => {
+        const _email = $("#email_textbox").val();
+        const _username = $("#username_textbox").val();
+        const _password = $("#password_textbox").val();
+
+        if (validateEmail(_email) && _username && _password) {
+            registerButtonClick();
+            return true;
+        }
+        else {
+            showBad();
+            //alert('Invalid data');
+            return false;
+        }
+    };
+
+    const showBad = () => {
+        const _email = $("#email_textbox").val();
+        const _username = $("#username_textbox").val();
+        const _password = $("#password_textbox").val();
+
+        if (!validateEmail(_email)) $("#email_textbox").css("border-color", "red");
+
+        if (!_username) $("#username_textbox").css("border-color", "red");
+        if (!_password) $("#password_textbox").css("border-color", "red");
+    }
+
+    const registerButtonClick = () => {
+        const _email = $("#email_textbox").val();
+        const _username = $("#username_textbox").val();
+        const _password = $("#password_textbox").val();
+
+        selfserve.auth.registerAccount(_email, _username, _password, (r, s, xhr) => {
+            if (s === "success") {
+                registrationSuccessful();
+                selfserve.auth.loginAs(_username, _password, true, (user_loggedin_as) => {
+                    if (user_loggedin_as.err) {
+                        alert('Post-registration login failed. Please contact the system administrator.', user_loggedin_as.err);
+                    }
+                    else {
+                        $(".registration_successful").html(`Logged in as ${selfserve.global.currentUser.username}`);
+                    }
+                });
+            }
+            else registrationFailed(r);
+        });
+    };
+    selfserve.global.onLoad.push(() => selfserve.random_banner.setBannerWithGradient("./images/random/constellation_entity.jpg", { r: 255, g: 255, b: 255 }));
+</script>
+
+<div id="registration_container" style="padding: 1%;">
+    <div class="registration_failed">
+        Registration FAILED!<br><br>
+        Cause: <div id="cause">
+
+        </div>
+
+        <br>
+        <a href="javascript:void(0);" onclick="location.reload();">Go back</a>
+    </div>
+
+    <div class="registration_successful">
+        <!--This message is inserted at runtime through JS-->
+    </div>
+
+    <form id="registration_form" action="javascript:validation();">
+        <p>
+            All below fields are required for registration.<br>
+            Prior to registering, an administrator will need to verify your account.
+        </p>
+
+        E-Mail:<br>
+        <input type="text" name="email" id="email_textbox"><br>
+        Username:<br>
+        <input type="text" name="username" id="username_textbox"><br>
+        Password:<br>
+        <input type="password" name="password" id="password_textbox"><br>
+        <input type="submit" value="Register">
+    </form>
+</div>

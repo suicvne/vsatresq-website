@@ -1,0 +1,9 @@
+{
+	"apps": [
+		{
+			"name": "selfserve",
+			"script": "npm",
+			"args": "run-script serve"
+		}
+	]
+}

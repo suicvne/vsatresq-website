@@ -1,0 +1,19 @@
+.TopBackground {
+	background-image: url(../images/header.gif);
+	background-repeat: no-repeat;
+}
+.style1 {color: #163A6A}
+.style2 {color: #193E6A}
+.OuterBorder {
+	border: 3px solid #4E88C7;
+}
+.BottomBorder {
+	border: thin solid #9CBCE0;
+}
+.SearchButton {
+	background-image: url(../v1_2/images/buttons/Search.gif);
+	background-repeat: no-repeat;
+	height: 23px;
+	width: 53px;
+	visibility: visible;
+}

@@ -1,0 +1,638 @@
+---
+layout: "shop_template"
+---
+
+<style>
+    .cookie_check_fail {
+        display: none;
+    }
+
+    .shop_cp_content {
+        display: none;
+    }
+</style>
+
+<link rel="stylesheet" href="/scripts/plugins/image-picker/image-picker.css">
+<script src="/scripts/plugins/image-picker/image-picker.js"></script>
+
+<script src='/scripts/existing_images.js'></script>
+<script src='/scripts/shop_cp_orders.js'></script>
+
+<script>
+    document.title = "Psychcat - Shop Control Panel";
+    $(".shop_cp_content").css("display", "none"); // Hide the shop CP
+
+
+
+    const editEntry = (item_id) => {
+        console.log(item_id);
+        selfserve.shop.getItemByID(item_id, (item) => {
+            if (item !== undefined) {
+                console.log(item);
+                occupyItemOverlay(item);
+                displayItemOverlay();
+            }
+            else alert('Item ID invalid or undefined. Unable to edit this.');
+        });
+        //alert('Editing item ' + item_id);
+    };
+
+    const deleteItem = (item_id) => {
+        selfserve.shop.getItemByID(item_id, (item) => {
+            let actually_delete = confirm(`Are you sure want to delete the item '${item.item_name}'?`);
+            if (actually_delete) {
+                console.log('deleting', item);
+                selfserve.shop.admin.deleteShopItemFromDb(item, (msg) => {
+                    alert('Result: ' + msg);
+                    window.location.reload();
+                });
+            }
+        });
+    };
+
+    const clearTable = () => {
+        $("#shop_items tbody").first().empty().append("<tr>" +
+            "<th>Thumbnail</th>" +
+            "<th>Item</th>" +
+            "<th>Price</th>" +
+            "<th>Description</th>" +
+            "</tr>");
+    };
+
+    const appendShopItem = (shop_item) => {
+        console.log(`appending ${shop_item.item_name}`);
+
+        let __edit_button = `<input type='button' value='EDIT' onclick="editEntry('${shop_item._id}');"></input>`;
+        let __delete_button = `<input type='button' value='DELETE' onclick="deleteItem('${shop_item._id}');"></input>`;
+
+
+        if (shop_item.images !== undefined && shop_item.images.length > 0) {
+            $("#shop_items tbody").first().append(
+                `<tr data-item_id='${shop_item._id}'>` +
+                `<td><img class="item_image" src="${shop_item.images[0]}"></img></td>` +
+                `<td>${shop_item.item_name}</td>` +
+                `<td>\$${shop_item.price} (${shop_item.currency})</td>` +
+                `<td>${shop_item.description}</td>` +
+                `<td>${__edit_button} / ${__delete_button}</td>` +
+                `</tr>`
+            );
+        }
+        else {
+            $("#shop_items tbody").first().append(
+                `<tr>` +
+                `<td>No image</td>` +
+                `<td>${shop_item.item_name}</td>` +
+                `<td>\$${shop_item.price} (${shop_item.currency})</td>` +
+                `<td>${shop_item.description}</td>` +
+                `<td>${__edit_button}${__delete_button}</td>` +
+                `</tr>`
+            );
+        }
+    };
+
+    const appendMessage = (message) => {
+        $("#shop_items tbody").first().append(
+            `<tr>` +
+            `<td>${message}</td>` +
+            `<td></td>` +
+            `<td></td>` +
+            `<td></td>` +
+            `</tr>`
+        );
+    };
+
+    const displayItems = () => {
+        console.log("Populating table");
+        clearTable();
+        selfserve.shop.getAllItems((result, status) => {
+            if (status === "success") {
+                console.log(result);
+                if (result.length === 0) {
+                    appendMessage("No items in the shop!");
+                }
+                else {
+                    if (selfserve.shop.isTestMode) {
+                        $("#shop_items tbody").first().append(
+                            `<tr>` +
+                            `<td>WARNING</td>` +
+                            `<td>These are just example items.</td>` +
+                            `<td>The changes you make will not actually be reflected.</td>` +
+                            `<td>Have fun :)</td>` +
+                            `</tr>`
+                        );
+                        $("#shop_items tbody").first().append(
+                            `<tr>` + `<hr></hr>` +
+                            /*`<td> </td>` +
+                            `<td> </td>` +
+                            `<td> </td>` +
+                            `<td> </td>` +*/
+                            `</tr>`
+                        );
+                    }
+                    result.forEach(element => {
+                        appendShopItem(element);
+                    });
+                }
+            }
+            else {
+                $("#shop_items tbody").first().append(
+                    `<tr>` +
+                    `<td>ERROR</td>` +
+                    `<td>Something bad happened.</td>` +
+                    `<td>Tell Mike asap.</td>` +
+                    `<td></td>` +
+                    `</tr>`
+                );
+            }
+        });
+    };
+
+    const validateForm = () => {
+        var regex = /^\d+(?:\.\d{0,2})$/;
+        alert("TODO: actually do this");
+    };
+
+    const displayItemOverlay = () => {
+        $("#overlay").css("display", "block");
+
+    };
+    const hideItemOverlay = () => {
+        $("#overlay").css("display", "none");
+        document.title = "Psychcat - Shop Control Panel";
+    };
+
+    const occupyItemOverlay = (item) => {
+        $("#overlay_header").html('Edit Shop Item');
+        document.title = "Psychcat - Editing Item";
+
+        // Set the item's ID to indicate we're editing
+        $("#item_editor_container").data('edit_id', item._id);
+
+        // Enable the item ID display, because it's a known value
+        $("#item_id").html($("#item_editor_container").data('edit_id'));
+        $("#item_id").show();
+
+        // Item Name
+        $("#new_item_name").val(item.item_name);
+
+        // Item Description
+        $("#new_item_description").val(item.description);
+
+        // Item Price
+        $("#new_item_price").val(item.price);
+
+        // Images
+        // item.images
+        $("#upload_preview").html('');
+
+        if (item.optional_file !== undefined && item.optional_file.trim()) {
+            $('#optional_file_url_container')
+                .html('') // Clear
+                .append(`<a href='${item.optional_file}'>Preview Existing File</a><br>(Uploading a new file will replace this)`) // Append a nice preview
+                .show(); // Show it bc it's hidden by default
+        }
+
+        if (item.images !== undefined) {
+            item.images.forEach((image_url, index) => {
+                let preview = createImgPreview(image_url);
+                $("#upload_preview").append(preview);
+            });
+        }
+    };
+
+    const createThrobber = (img) => {
+        $(img).parent().append("<div id='update'></div>");
+
+        return {
+            update: (percentage) => {
+                $(img).parent().find('#update').html(percentage);
+            },
+            j: $(img),
+            ctx: img
+        };
+    };
+
+    function FileUpload(img, file) {
+        const reader = new FileReader();
+        this.ctrl = createThrobber(img);
+        const xhr = new XMLHttpRequest();
+        this.xhr = xhr;
+
+        const self = this;
+
+        this.xhr.upload.addEventListener("progress", function (e) {
+            if (e.lengthComputable) {
+                const percentage = Math.round((e.loaded * 100) / e.total);
+                self.ctrl.update(percentage);
+            }
+        }, false);
+
+        xhr.upload.addEventListener("load", function (e) {
+            self.ctrl.update(100);
+            //const canvas = self.ctrl.ctx.canvas;
+            //canvas.parentNode.removeChild(canvas);
+        }, false);
+
+        xhr.open("POST", "shop/upload_item_image");
+        xhr.overrideMimeType('text/plain; charset=x-user-defined-binary');
+        reader.onload = function (evt) {
+            xhr.send(evt.target.result);
+        };
+        reader.readAsBinaryString(file);
+    }
+
+    const convertToBase64 = (select_id, callback) => {
+        //Read File
+        var selectedFile = document.getElementById(select_id).files;
+        console.log(selectedFile);
+        //Check File is not Empty
+        if (selectedFile.length > 0) {
+            // Select the very first file from list
+            var fileToLoad = selectedFile[0];
+            // FileReader function for read the file.
+            var fileReader = new FileReader();
+            var base64;
+            // Onload of file read the file content
+            fileReader.onload = function (fileLoadedEvent) {
+                console.log(base64);
+                base64 = fileLoadedEvent.target.result;
+                callback(base64);
+            };
+            // Convert data to base64
+            fileReader.readAsDataURL(fileToLoad);
+        }
+    }
+
+    const uploadItemImage = (img, base64data, extension, cb) => {
+        $.post("shop/upload_item_image", { item_image: base64data, extension: extension }, (result) => {
+            $(img).parent().append(`<a href='${result}'></a>`);
+            cb(result);
+        });
+    };
+
+    const uploadOptionalFile = (base64data, extension, callback) => {
+        $.post('shop/cdn', { base64: base64data, extension: extension, token: selfserve.auth.getCookie('token'), username: selfserve.auth.getCookie('username') },
+            (result) => {
+                console.log('result of cdn upload: ', result)
+                callback(result);
+            }).fail((jqXHR) => {
+                callback(undefined, jqXHR.responseText);
+            }
+            );
+    };
+
+    const submitItem = () => {
+        let editing = ($("#item_editor_container").data('edit_id') !== 'undefined');
+        let id = $("#item_editor_container").data('edit_id');
+
+        uploadImages({ editing: editing, item_id: id });
+    };
+
+    const makeImgUploadPromise = (existingImages, uploadQueue) => {
+        return new Promise((resolve, reject) => {
+            console.log("begin promise");
+            var theURLs = existingImages;
+            let counter = 0;
+            let isComplete = false;
+
+            if (uploadQueue.length === 0) resolve(existingImages);
+
+            for (let i = 0; i < uploadQueue.length; i++) {
+                console.log("uploading ", counter);
+                var newUpload = uploadQueue[i];
+                uploadItemImage(newUpload.obj, newUpload.data, newUpload.extension,
+                    (returnedURL) => {
+                        console.log("Upload done. Success: ", (returnedURL !== undefined));
+                        if (returnedURL) theURLs.push(returnedURL);
+
+                        counter++;
+                        if (counter == uploadQueue.length) {
+                            console.log("maybe done, let's check");
+                            console.log(`${theURLs.length} === ${uploadQueue.length}`);
+                            if (theURLs.length >= uploadQueue.length) {
+                                resolve(theURLs);
+                            } else reject(Error("Someting is vewy wrong"));
+                        }
+                    }
+                );
+            }
+            console.log('last line of promise');
+        });
+    }
+
+    const makeOptionalFilePromise = () => {
+        return new Promise((resolve, reject) => {
+            console.log('begin optional file promise');
+
+            let filesCount = $("#optional_file").prop('files').length;
+
+            let fileName = $("#optional_file").prop('files')[0].name
+            let extension = fileName.split('.', 2)[1];
+
+            if (filesCount > 0) {
+                convertToBase64("optional_file", (optional_base64) => {
+                    if (optional_base64 !== undefined) {
+                        uploadOptionalFile(optional_base64, extension, (optional_file_, error) => {
+                            if (error) reject(error);
+                            if (optional_file_ === undefined || optional_file_.length === 0) reject(error);
+
+                            resolve(optional_file_);
+                        });
+                    }
+                    else reject('Base64 was undefined. Something went wrong in the conversion.');
+                });
+            }
+            else {
+                console.log('no files! moving on!');
+                resolve(undefined);
+            }
+        });
+    };
+
+    const uploadImages = (params) => {
+        const imgs = document.querySelectorAll(".obj");
+
+        let uploadQueue = [];
+
+        let existingImages = [];
+        for (let i = 0; i < imgs.length; i++) {
+            if (imgs[i].file === undefined) {
+                existingImages.push(selfserve.global.RemoveBaseURL(imgs[i].src));
+                continue;
+            }
+            let fileName = imgs[i].file.name;
+            let extension = fileName.substring(fileName.indexOf('.'));
+            let base64 = imgs[i].src;
+
+
+            uploadQueue.push
+                (
+                    {
+                        fileName: fileName,
+                        extension: extension,
+                        data: base64,
+                        obj: imgs[i]
+                    }
+                );
+        }
+
+        // let optionalFilePromise = new Promise((resolve, reject) => {
+            
+        // });
+
+        // let promiseTest = new Promise((resolve, reject) => {
+            
+        // });
+
+        let stepa = makeImgUploadPromise(existingImages, uploadQueue);
+        let stepb = stepa.then((stepa_result) => {
+            return makeOptionalFilePromise();
+        });
+
+        Promise.all([stepa, stepb]).then((results) => {
+            let imgs = results[0];
+            let optional_file = results[1];
+            
+            let newShopItem = MakeShopItem(imgs, optional_file);
+                if (newShopItem) {
+                    if(params.editing)
+                    {
+                        selfserve.shop.admin.editItem(params.item_id, newShopItem, (status, result) => {
+                            if(result === undefined) alert('Error editing: ', status);
+                            else 
+                            {
+                                alert('Edited successfully');
+                                window.location.reload();
+                            }
+                        });
+                    }
+                    else
+                    {
+                        selfserve.shop.admin.addShopItemToDb(newShopItem, (result) => {
+                            if (result === true) {
+                                alert(`Added ${newShopItem.item_name} to database.`);
+                                window.location.reload();
+                            }
+                            else alert(`Error adding item: \n\n${result}`);
+                        });
+                    }
+                } else console.log("Couldn't make new shop item? :(");
+        });
+
+        // Promise.resolve({img_result: undefined, optional_file: undefined})
+        //     .then(final_result => makeImgUploadPromise(existingImages, uploadQueue).then(result => final_result["img_result"] = result))
+        //     .then(final_result => makeOptionalFilePromise().then(result => final_result["optional_file"] = result))
+        //     .then(final_result => {
+        //         console.log('End of promise chain.');
+        //         console.log(final_result);
+        //     });
+
+        // Promise.all([makeImgUploadPromise, makeOptionalFilePromise]).then(responses => {
+        //     console.log('promises done');
+        //     responses.forEach(prms => {
+        //         prms.resolve();
+        //     });
+        //     // responses.map((response) => console.log(response));
+        // }, rejection => {
+        //     console.log('rejection: ', rejection);
+        // });
+        // optionalFilePromise.then((url_result) => {
+        //     console.log('optional file upload URL result: ', url_result);
+        //     return promiseTest;
+        // }, (optional_file_error) => {
+        //     console.error(`Error while uploading optional file: ${optional_file_error}`);
+        // });
+    }
+
+    /** Construct a ShopItem object for upload based on data in the form */
+    function MakeShopItem(imageURLs, optionalFileURL) {
+        let _name = $("#new_item_name").val();
+        let _description = $("#new_item_description").val();;
+        let _price = $("#new_item_price").val();
+
+        let params =
+        {
+            images: imageURLs,
+            item_name: _name,
+            description: _description,
+            price: _price,
+            currency: "USD",
+            optional_file: optionalFileURL
+        };
+        console.log("the parameters of this arrangement", params);
+        return new ShopItem(params);
+    };
+
+    const createImgPreview = (url, file = undefined) => {
+        const imgContainer = document.createElement("div");
+        imgContainer.classList.add('item_image_container');
+
+        const overlay = document.createElement("div");
+        overlay.classList.add('item_image_overlay');
+        /*overlay.appendChild('X :)');*/
+
+        const img = document.createElement("img");
+        img.classList.add("obj");
+        img.classList.add("item_image_cp");
+
+        if (file !== undefined) img.file = file;
+        else img.src = url;
+
+        imgContainer.addEventListener('click', (event) => {
+            var trgt = event.target;
+            trgt.parentNode.remove();
+        });
+
+        imgContainer.appendChild(img);
+        imgContainer.appendChild(overlay);
+
+        return imgContainer;
+    }
+
+    const handleFiles = (files) => {
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+
+            if (!file.type.startsWith("image/")) { continue; }
+
+            let imgContainer = createImgPreview(undefined, file);
+            let img = $(imgContainer).find('img');
+            console.log(img);
+
+            let preview = document.getElementById("upload_preview");
+            preview.appendChild(imgContainer);
+
+            const reader = new FileReader();
+            reader.onload = (function (aImg) { return function (e) { aImg.attr('src', e.target.result); }; })(img);
+            reader.readAsDataURL(file);
+        }
+    };
+
+    selfserve.auth.onLogin.push(() => {
+        checkAuth();
+        displayItems();
+    });
+
+    const showOrders = () => {
+        $("#view_order_button").css('background-color', 'gray');
+        $("#item_mod_button").css('background-color', 'white');
+
+        $("#shop_items_container").hide();
+        $("#view_orders_container").show();
+
+        occupyOrdersTable();
+    };
+
+    const showItemModifier = () => {
+        $("#view_order_button").css('background-color', 'white');
+        $("#item_mod_button").css('background-color', 'gray');
+
+        $("#view_orders_container").hide();
+        $("#shop_items_container").show();
+    };
+
+    const checkAuth = () => {
+        let shouldShowError = false;
+        if (!selfserve.global.loggedIn) {
+            shouldShowError = true;
+            $(".cookie_check_fail > p").html("You are not logged in.");
+        }
+        if (selfserve.global.currentUser.power > 1) {
+            shouldShowError = true;
+            $(".cookie_check_fail > p").html("You have no permission to see this.");
+        }
+
+        if (shouldShowError) {
+            $(".cookie_check_fail").css("display", "block");
+            $("#cp_container").css("display", "none");
+            selfserve.shop.clearCart();
+        }
+    };
+</script>
+
+<div id="shop_cp_toolbar">
+    <input id="item_mod_button" type="button" value="Item Modifier" onclick="showItemModifier();"
+        style="background-color: gray;">
+    <input id="view_order_button" type="button" value="View Orders" onclick="showOrders();"
+        style="background-color: white;">
+</div>
+
+<div id="cp_container" style="padding: 1%">
+    <div id="overlay">
+        <div id="item_editor_container" data-edit_id="undefined">
+            <h2 id="overlay_header">New Shop Item</h2>
+            <form onsubmit="return validateForm()" id="new_item_form">
+                <p id='item_id' style='display: hidden'></p>
+                Item Name:<br>
+                <input type="text" name="item_name" id="new_item_name"><br><br>
+                Item Description:<br>
+                <input type="text" name="item_description" id="new_item_description"><br><br>
+                Item Price (USD):<br>
+                $ <input type="text" name="item_price" id="new_item_price"><br><br>
+                Select images: <input type="file" name="img" multiple onchange="handleFiles(this.files)"><br>
+                <div id="upload_preview"></div>
+
+                <br>
+                (Optional) Attach a file for your customers who buy this item.<br>
+                <input type="file" name="optional_file" id="optional_file">
+                <div id="optional_file_url_container" style='display: none;'></div>
+                <br>
+                <br>
+                <input type="button" value="Submit" onclick="submitItem();">
+                <input type="button" value="Cancel" onclick="hideItemOverlay();">
+                <a href="javascript:void(0);" onclick="showExistingImagesOverlay();">Use existing image(s)</a><br>
+            </form>
+        </div>
+    </div>
+
+    <div id="existing_images_overlay" class="overlay">
+        <div id="item_editor_container">
+            <input type="button" value="Test Load" onclick="populateExistingImagesList();">
+            <h2>Existing Images</h2>
+
+            <input type="button" value="Confirm Selection" onclick="confirmExistingImagesSelection();">
+            <input type="button" value="Cancel" onclick="hideExistingImagesOverlay();">
+            <div id="dummy_scroll_container">
+                <select id="existing_images_select" multiple="multiple" class="image-picker"></select>
+            </div>
+        </div>
+    </div>
+
+    <div id="shop_items_container" style="background-color: gray;">
+        <div id="cp_nav" style="background-color: black;">
+            <input id="add_item_button" type="button" value="Add New Item" onclick="displayItemOverlay();"></input>
+        </div>
+        <br>
+        <table id="shop_items" style="width:100%">
+            <tbody>
+                <tr>
+                    <th>Thumbnail</th>
+                    <th>Item</th>
+                    <th>Price</th>
+                    <th>Description</th>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div id="view_orders_container" style="background-color: gray; display: none;">
+        <table id="shop_orders_table" style="width: 100%">
+            <tbody>
+                <tr>
+                    <th>Order Date</th>
+                    <th>Order ID</th>
+                    <th>Payer</th>
+                    <th>Order Status</th>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="cookie_check_fail">
+    ERROR: <p>Insert error message here.</p>
+    Please <a href="./auth/login.html">Login!</a>
+</div>
+
+<div class="shop_cp_content">
+    <p>Welcome to the hidden shop control panel!</p>
+</div>

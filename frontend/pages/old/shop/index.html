@@ -1,0 +1,65 @@
+---
+layout: "shop_template"
+---
+
+<script>
+    document.title = "Psychcat - Shop";
+    const descSubstring = (inputStr, length) => {
+        if (inputStr.length > length) {
+            return (inputStr.substring(0, length) + "...");
+        }
+        else return inputStr;
+    }
+
+    selfserve.shop.initCompleteFn = () => {
+        $cartItemTemplate = $(".shop_item_container").clone();
+        $('.items_container').html(''); //blank out the cart section.
+
+        if (selfserve.shop.db.length > 0) {
+            selfserve.shop.db.forEach((cartItem, index) => {
+                let $newCartSquare = $cartItemTemplate.clone();
+
+
+                /*$newCartSquare.find('.item_name').html(`<a href="./shop/viewitem.html?item_id=${cartItem._id}">${cartItem.item_name}</a>`);*/
+                $newCartSquare.find('.item_name').html(`<h2>${cartItem.item_name}</h2>`)
+                $newCartSquare.find('.item_description').html(descSubstring(cartItem.description, 30));
+                $newCartSquare.find('.price').html(`<h3>\$${cartItem.price} (${cartItem.currency})</h3>`);
+
+                if (cartItem.images !== undefined && cartItem.images.length > 0)
+                    $newCartSquare.find('.item_image').attr('src', `${cartItem.images[0]}`);
+
+                let outerLink = $("<a></a>").attr('href', `./shop/viewitem.html?item_id=${cartItem._id}`).attr('id', 'shop_item_outerlink');
+                outerLink.append($newCartSquare);
+
+                $('.items_container').append(outerLink);
+            });
+        }
+        else
+        {
+            let errorMessage = $("<div></div>").html("<h3>No shop items</h3><br>Try again later.");
+            $('.items_container').append(errorMessage);
+        }
+    }
+</script>
+
+<div id="items_wrapper">
+    <div class="items_container">
+        <div class="shop_item_container">
+            <div class="item_image_container">
+                <img class="item_image" src="./images/shop/empty_cart.png">
+            </div>
+            <div class="item_name"></div>
+            <div class="price"></div>
+        </div>
+    </div>
+</div>
+
+<!--
+<script>
+    document.title = "Shop - Psych Cat"
+</script>
+
+<div>
+    Coming very soon!
+</div>
+-->
