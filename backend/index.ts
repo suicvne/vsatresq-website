@@ -17,7 +17,7 @@ import * as ServiceCalendarController from './controllers/ServiceCalendarControl
 
 let fs = require('fs');
 let childProcess = require('child_process');
-let selfserve_config = require('../site.config');
+let selfserve_config = require(`${process.cwd()}/../site.config`);
 //#endregion
 
 const cms: Selfserve = new Selfserve(selfserve_config.selfserve.hostPort);
