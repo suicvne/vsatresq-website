@@ -7,9 +7,9 @@
     "tswatch": "tsc -w",
     "build-all": "tsc && npm run-script build",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "mkdir -p ./selfserve/build/ && node ./selfserve/scripts/build.js",
-    "serve": "node ./selfserve/build/selfserve/backend/",
-    "clean": "rm -rf ./selfserve/build/",
+    "build": "mkdir -p ./build/ && node ./scripts/build.js",
+    "serve": "node ./build/selfserve/backend/",
+    "clean": "rm -rf ./build/",
     "mongo-test-server": "mkdir -p './testing/mongodb/data/db' && mongod --dbpath './testing/mongodb/data/db'"
   },
   "author": "Mike Santiago (axiom@ignoresolutions.xyz)",

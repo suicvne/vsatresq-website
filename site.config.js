@@ -20,7 +20,7 @@ module.exports = {
     layout: 'template.ejs'
   },
   build: {
-    srcPath: './frontend',
+    srcPath: '../frontend',
     outputPath: process.env.NODE_ENV === 'production' ? './docs' : './selfserve/build/public_html'
   },
   selfserve: {

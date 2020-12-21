@@ -6,7 +6,7 @@ const ejs = require('ejs');
 const marked = require('marked');
 const frontMatter = require('front-matter');
 const glob = require('glob');
-const config = require(`${process.cwd()}/site.config`);
+const config = require(`${process.cwd()}/../site.config`);
 
 let srcPath = './site-src';
 if(config.build.srcPath !== undefined) srcPath = config.build.srcPath;
