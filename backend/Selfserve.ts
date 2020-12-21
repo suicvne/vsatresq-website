@@ -34,7 +34,7 @@ export default class Selfserver {
         ServiceCalendarBackend.init();
     }
     
-    constructor(_port: number, _backupPort: number, _staticDirectory: string = `${process.cwd()}/build/public_html/`) 
+    constructor(_port: number = 3000, _backupPort: number, _staticDirectory: string = `${process.cwd()}/build/public_html/`) 
     {
         this.port = _port;
         this.backupPort = _backupPort;
@@ -69,6 +69,7 @@ export default class Selfserver {
     }
 
     public startServer(){
+        DebugConsole.Writeq('\nAttempting to start server.\n');
         try
         {
             DebugConsole.Writeq(`Try read of CA from ${selfserve_config.ca_path}`);
