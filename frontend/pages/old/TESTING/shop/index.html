@@ -1,0 +1,53 @@
+---
+layout: "shop_template"
+---
+
+<script type="text/javascript">
+    selfserve.shop.initCompleteFn = () => {
+        $("#peek").text(JSON.stringify(selfserve.shop.db));
+
+        selfserve.shop.db.forEach(element => {
+            var _id, _name, _desc, _price;
+
+            _id = $("<td></td>").html(`${element._id}`);
+            _name = $("<td></td>").html(`${element.item_name}`);
+            _desc = $("<td></td>").html(`${element.description}`);
+            _price = $("<td></td>").html(`${element.price} ${element.currency}`);
+
+            _img = $("<img>").attr('src', element.images[0]).attr('style', 'max-width: 1em; height: auto;');
+            _link = $("<a>").append(_img);
+            //_link.attr('href', '#');
+            _link.click(() => {
+                addToCart(element._id);
+                return false;
+            });
+            _link.append(_img);
+
+            _preview = $("<td></td>").html(_link);
+
+            var tblRow = $("<tr></tr>");
+            tblRow.append(_id, _name, _desc, _price, _preview);
+            $("#datatable").append(tblRow);
+        });
+    }
+</script>
+
+<div id="shop_container" style='padding: 1%;'>
+    <div id="welcome_message">
+        Welcome to the brand new Psych Cat webstore! Feel free to browse around.
+    </div>
+    <div>
+        <textarea style='min-width: 70%; height: auto;' id='peek'></textarea>
+        <br>
+        <table id="datatable" style='background-color: gray'>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Price</th>
+                <th>Image</th>
+            </tr>
+        </table>
+
+    </div>
+</div>

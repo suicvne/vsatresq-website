@@ -1,0 +1,36 @@
+---
+layout: "new_template"
+---
+
+<script type="text/javascript">
+
+    window.onload = () => {
+        console.log('fuck');
+        $("textarea").on("change", (evnt) => {
+            console.log(evnt);
+            evt = evt.which || window.event; // WOW!!! I handled IE for once.
+            if (evt.keyCode === 13) {
+                let inputText = $("#inputField").text().toString();
+                $("#inputField").text("");
+                postTypescript(inputText, (result) => {
+                    alert(result);
+                });
+            }
+        });
+    };
+
+
+    const postTypescript = (inputTS, callback) => {
+        if ($.trim(inputTS)) {
+            $.post('/ts/exec', { ts: inputTS }, (result, status, xhr) => {
+                console.log(result, status);
+                callback(result);
+            });
+        }
+    };
+
+</script>
+
+<textarea id="inputField" rows="1" cols="70">
+// An interactive typescript console.
+</textarea>

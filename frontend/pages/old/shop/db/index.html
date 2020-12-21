@@ -1,0 +1,89 @@
+---
+layout: "shop_template"
+---
+
+<!--TODO: Auth-->
+
+<script>
+
+    selfserve.global.onLoad.push(() => {
+        displayItems();
+    });
+
+    const appendShopItem = (shop_item) => {
+        console.log(`appending ${shop_item.item_name}`);
+        $("#shop_items tbody").first().append(
+            `<tr>` +
+                `<td>${shop_item.item_name}</td>` +
+                `<td>\$${shop_item.price} (${shop_item.currency})</td>` +
+                `<td>${shop_item.description}</td>` +
+                `<td>${shop_item.images}</td>` +
+            `</tr>`
+        );
+    };
+
+    const clearTable = () => {
+        $("#shop_items tbody").first().empty().append("<tr>" +
+                "<th>Item</th>" +
+                "<th>Price</th>" +
+                "<th>Description</th>" +
+                "<th>Image URLS</th>" +
+            "</tr>");
+    };
+
+    // This script
+    const displayItems = () => {
+        console.log("Populating table");
+        clearTable();
+        selfserve.shop.getAllItems((result, status) => {
+            if (status === "success") {
+                console.log(result);
+                if (selfserve.shop.isTestMode) {
+                    $("#shop_items tbody").first().append(
+                        `<tr>` +
+                            `<td>WARNING</td>` +
+                            `<td>These are just example items.</td>` +
+                            `<td>The changes you make will not actually be reflected.</td>` +
+                            `<td>Have fun :)</td>` +
+                        `</tr>`
+                    );
+                    $("#shop_items tbody").first().append(
+                        `<tr>` + `<hr></hr>` +
+                            /*`<td> </td>` +
+                            `<td> </td>` +
+                            `<td> </td>` +
+                            `<td> </td>` +*/
+                        `</tr>`
+                    );
+
+                }
+                result.forEach(element => {
+                    appendShopItem(element);
+                });
+            }
+            else
+            {
+                $("#shop_items tbody").first().append(
+                        `<tr>` +
+                            `<td>ERROR</td>` +
+                            `<td>Something bad happened.</td>` +
+                            `<td>Tell Mike asap.</td>` +
+                            `<td></td>` +
+                        `</tr>`
+                    );
+            }
+        });
+    };
+
+</script>
+
+<table id="shop_items" style="width:100%">
+    <tbody>
+            <tr>
+                    <th>Item</th>
+                    <th>Price</th>
+                    <th>Description</th>
+                    <th>Image URLS</th>
+                </tr>
+    </tbody>
+</table>

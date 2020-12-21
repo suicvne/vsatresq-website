@@ -1,0 +1,158 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  padding-bottom: 100px;
+}
+
+.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+  cursor: default;
+}
+
+.vl {
+  border-left: 6px solid #4E3094;
+  height: 50px;
+  display: initial;
+  margin: 8pt;
+}
+
+body {
+  min-height: 100vh;
+  position: relative;
+  margin: 0;
+}
+
+img {
+  max-width: 110% !important;
+  height: auto !important;
+}
+
+.vsatfooter {
+  background-color: #4E3094;
+  margin: 0px auto;
+  padding: 20px 0px 20px 0px;
+  width: 100%;
+}
+
+textarea {
+  height: 100%;
+  width: 100%;
+}
+
+.vsatfooter :link {
+  color: white;
+}
+
+.vsatfooter :visited {
+  color: white;
+}
+
+.sticky {
+  position: sticky;
+  top: 0px;
+}
+
+.round_corners {
+  border-radius: 10px;
+}
+
+.give_me_space {
+  margin-bottom: 1.5%;
+}
+
+.drop_shadow {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+#sidenav {
+  background-color: #333;
+  color: white;
+  margin: 0;
+  z-index: 1;
+}
+
+#sidenav a {
+  padding: 6px 8px 6px 16px;
+  text-decoration: none;
+  font-size: 25px;
+  color: #818181;
+  display: block;
+}
+
+#sidenav a:hover {
+  color: #f1f1f1;
+}
+
+.active {
+  background-color: #4E3094;
+}
+
+.nav>a.nav-link {
+  text-decoration: none;
+  color: white;
+}
+
+.nav>a.nav-link:hover {
+  background-color: #000;
+}
+
+#maincontentarea {
+  display: flex;
+  align-items: stretch;
+}
+
+button {
+  background-color: #4E3094;
+  -webkit-transition-duration: 0.4s;
+  /* Safari */
+  transition-duration: 0.4s;
+  color: #f1f1f1 !important;
+}
+
+button:hover {
+  box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19);
+}
+
+hr {
+  color: black;
+  border-bottom: 2px solid #000000;
+}
+
+.jumbotron {
+  padding: 0;
+  margin: 0px auto;
+  /*background: #4E3094 ;*/
+  color: floralwhite;
+}
+
+.logo-img {
+  width: auto !important;
+  display: block;
+  padding: 20px;
+  max-height: 12em;
+}
+
+.logo-container {
+  background-color: #0d1a46;
+  width: 100%;
+  /*background-image: linear-gradient(to right, rgba(255, 255, 255, 1.0), rgba(255, 255, 255, 0.2)), url('../images/satdish1.jpg');*/
+  background-image: linear-gradient(to right, rgba(255, 255, 255, 1.0), rgba(255, 255, 255, 0.96), rgba(255, 255, 255, 0.0)), url('/images/satdish1.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: relative;
+  /*background-position: center;*/
+  background-position-x: 100%;
+  background-position-y: center;
+  /*transform: translate(-50%, 0);*/
+}
+
+.blog-post {
+  max-width: 100%;
+}
+
+.avatar {
+  max-width: 120px !important;
+  height: auto;
+}

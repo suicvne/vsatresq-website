@@ -1,0 +1,106 @@
+<script src="//webrtc.github.io/adapter/adapter-latest.js" type="text/javascript"></script>
+<script src="./scripts/quagga.js" type="text/javascript"></script>
+
+
+
+<h1>JS Barcode Test</h1>
+
+<button style="height: 100px;" onclick="start_video">Start</button>
+<button style="height: 100px;" onclick="stop_video">Stop</button>
+
+<div id="interactive" class="viewport">
+    <video></video>
+</div>
+
+<div id="messages">
+</div>
+
+<script>
+
+    let App = undefined;
+    Quagga.onDetected(function (result) {
+        var code = result.codeResult.code;
+        console.log(`detected: ${code}`);
+
+        if (App.lastResult !== code) {
+            App.lastResult = code;
+            var $node = null, canvas = Quagga.canvas.dom.image;
+
+            $("#messages").html().append(`${result}`);
+        }
+    });
+    
+    Quagga.onProcessed(function (result) {
+        var drawingCtx = Quagga.canvas.ctx.overlay,
+            drawingCanvas = Quagga.canvas.dom.overlay;
+
+        if (result) {
+            if (result.boxes) {
+                drawingCtx.clearRect(0, 0, parseInt(drawingCanvas.getAttribute("width")), parseInt(drawingCanvas.getAttribute("height")));
+                result.boxes.filter(function (box) {
+                    return box !== result.box;
+                }).forEach(function (box) {
+                    Quagga.ImageDebug.drawPath(box, { x: 0, y: 1 }, drawingCtx, { color: "green", lineWidth: 2 });
+                });
+            }
+
+            if (result.box) {
+                Quagga.ImageDebug.drawPath(result.box, { x: 0, y: 1 }, drawingCtx, { color: "#00F", lineWidth: 2 });
+            }
+
+            console.log(`processed: ${result}`, result);
+
+            if (result.codeResult && result.codeResult.code) {
+                Quagga.ImageDebug.drawPath(result.line, { x: 'x', y: 'y' }, drawingCtx, { color: 'red', lineWidth: 3 });
+            }
+        }
+    });
+
+
+    App = Quagga.init({
+        inputStream: {
+            name: "Live",
+            type: "LiveStream",
+            constraints: {
+                width: { min: 640 },
+                height: { min: 480 },
+                facingMode: "environment",
+                aspectRatio: { min: 1, max: 2 }
+            },
+            area: { // defines rectangle of the detection/localization area
+                top: "0%",    // top offset
+                right: "0%",  // right offset
+                left: "0%",   // left offset
+                bottom: "0%"  // bottom offset
+            },
+            target: document.querySelector('#interactive')    // Or '#yourElement' (optional)
+        },
+        decoder: {
+            readers: ["code_128_reader", "ean_reader", "upc_e_reader", "ean_8_reader"],
+            debug: {
+                drawBoundingBox: true,
+                showFrequency: false,
+                drawScanline: true,
+                showPattern: true
+            }
+        }
+    }, function (err) {
+        if (err) {
+            console.log("error while initing the barcode library");
+            console.log(err);
+            return
+        }
+        console.log("Initialization finished. Ready to start");
+
+        Quagga.start();
+    });
+
+    
+    function start_video() {
+        Quagga.start();
+    }
+
+    function stop_video() {
+        barcodeAPI.stop();
+    }
+</script>

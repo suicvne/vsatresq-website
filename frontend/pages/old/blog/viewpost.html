@@ -1,0 +1,19 @@
+---
+layout: "new_template"
+---
+
+<script>
+    document.title = "View Post - Psych Cat"
+    $("#nav-blog").addClass("active");
+
+    selfserve.global.onLoad.push(() => selfserve.random_banner.setBannerWithGradient("/images/random/constellation_entity.jpg", { r: 255, g: 255, b: 255 }));
+</script>
+
+<script src="scripts/viewpost.js"></script>
+
+<div id="post_container" style="padding: 1%;">
+        <div id="post" class="blog-post">
+                <h2 id="posttitle"></h2>
+                <div id="postcontent"></div>
+            </div>
+</div>
