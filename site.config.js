@@ -25,7 +25,7 @@ module.exports = {
     outputPath: process.env.NODE_ENV === 'production' ? './docs' : './build/public_html'
   },
   selfserve: {
-    hostPort: 8000,
+    hostPort: 8001,
 
     /**MongoDB Credentials */
     username: 'admin',
