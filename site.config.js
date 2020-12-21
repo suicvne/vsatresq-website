@@ -21,7 +21,7 @@ module.exports = {
   },
   build: {
     srcPath: './frontend',
-    outputPath: process.env.NODE_ENV === 'production' ? './docs' : './public'
+    outputPath: process.env.NODE_ENV === 'production' ? './docs' : './selfserve/build/public_html'
   },
   selfserve: {
 

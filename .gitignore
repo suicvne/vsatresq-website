@@ -1,5 +1,8 @@
 dist/*
 
+build/*
+selfserve/build/*
+
 # Logs
 logs
 *.log
