@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <base href="https://vsatresq.com/">
+  <link rel="stylesheet" href="/css/shop.css">
+
+  <!--Two essential scripts and one non-essential but still fun.-->
+  <script src="node_modules/jquery/dist/jquery.js"></script>
+  <script src="/scripts/selfserve.js"></script>
+  <script src="/scripts/selfserve_blog.js"></script>
+  <script src="/scripts/random_banner.js"></script>
+  <script src="/scripts/selfserve_shop.js"></script>
+</head>
+
+<body>
+  <div class="wrapper">
+    <div class="header_container">
+      <div class="header_logo_container"><a href="./"><img class="header_logo" src="images/logo.svg"></a></div>
+      <div class="header_logo_text_container">
+        <div id='header_logo_text_container' style='width=100%; height=100%'>
+          <h1 class="header_logo_text">PSYCH CAT WEBSTORE</h1>
+        </div>
+      </div>
+    </div>
+
+    <navbar class="custom_nav">
+      <a href="./shop/index.html">
+        <div class="shop_home tooltip">
+          <img src="./images/shop/home.png" class="cart_icon">
+          <span class="tooltiptext">Shop Home</span>
+        </div>
+      </a>
+      <br>
+      <a href="./TESTING/shop/cart.html">
+        <div class="cart tooltip">
+          <img src="./images/shop/empty_cart.png" class="cart_icon">
+          <span class="item_count">0</span>
+          <span class="tooltiptext">View Cart</span>
+        </div>
+      </a>
+      <a href="./shop/shop_cp" id="shop_cp_icon" style="display: none;">
+        <div class="cart tooltip">
+          <img src="./images/shop/cp.png" class="cart_icon">
+          <span class="tooltiptext">Shop Control Panel</span>
+        </div>
+      </a>
+    </navbar>
+
+    <div class="main_content_area">
+      <script src="/scripts/galleria.js"></script>
+<script>
+    document.title = "Psychcat - View Item";
+    let __representedItem = undefined;
+
+
+    const makeItemDescription = (name, description, price, image_urls) => {
+        generateCSS();
+
+        let item = $("<div></div>").prop("id", 'shop_item_parent');
+        item.append($(`<h3>${name} - <b>$${price}</b></h3>`));
+
+        let galleryMaster = $("<div></div>").prop('id', 'galleria').prop('class', 'galleria').css('height', '30em');
+
+        image_urls.forEach(url => {
+            galleryMaster.append($(`<a href="${url}"><img src="${url}" data-big="${url}" data-title="${name}" data-description="${description}"></a>`))
+        });
+
+
+        let combined = item.append(galleryMaster);
+        combined.append(`<br><input type='button' value='Add to Cart' onclick='addThisToCart()'></input>`);
+        combined.append("<br><br>Description: " + description);
+
+        $("#items_master").append($(combined));
+    };
+
+    // What's this?
+    const generateCSS = () => {
+        let cssString = `#galleria {\
+                height: 30em;\
+            }\n`;
+        $("<style>").prop("type", "text/css").html(cssString).appendTo("head");
+    };
+
+    const addThisToCart = () => {
+        if(__representedItem == undefined)
+        {
+            console.log("represented item is undefined");
+            return;
+        }
+
+        let result = selfserve.shop.addItemToCart(__representedItem);
+        if(result === 0)
+        {
+            alert(`Added 1x ${__representedItem.item_name} to cart.`);
+        }
+        else if(result === 1) console.log("uh oh");
+    };
+
+    selfserve.shop.initCompleteFn = () => {
+        let itemID = selfserve.auth.getUrlParameter("item_id");
+        if(itemID == undefined)
+        {
+            makeItemDescription("Apple USB-C Charger", "Up to 87w", "40.00", ["https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/image/AppleInc/aos/published/images/M/R2/MR2A2/MR2A2_AV1?wid=1144&hei=1144&fmt=jpeg&qlt=80&op_usm=0.5,0.5&.v=1534201696953", 
+                "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/image/AppleInc/aos/published/images/M/LL/MLL82/MLL82?wid=1144&hei=1144&fmt=jpeg&qlt=95&op_usm=0.5,0.5&.v=1544228152516", 
+                "https://assets.pcmag.com/media/images/458180-apple-macbook-12-inch-model-a1534.jpg?width=810&height=456"])
+            
+            Galleria.run("#galleria");
+        }
+        else
+        {
+            selfserve.shop.getItemByID(itemID, (theItem) => {
+                if(theItem === undefined)
+                {
+                    console.log("got undefined back");
+                    return;
+                }
+                __representedItem = theItem;
+                document.title = `Psychcat - Shop: ${theItem.item_name}`;
+                makeItemDescription(theItem.item_name, theItem.description, 
+                    theItem.price, theItem.images);
+                generateCSS();
+                
+            });
+        }  
+
+        Galleria.loadTheme('scripts/themes/classic/galleria.classic.js');
+        Galleria.run("#galleria");
+        console.log('init complete fn');
+    };
+</script>
+
+<div id="items_master">
+</div>
+    </div>
+  </div>
+</body>
+
+<script>
+  selfserve.global.onLoad.push(() => {
+    console.log('Set banner');
+    selfserve.random_banner.setBannerWithGradient("./images/random/shop.png", {r: 255, g: 255, b: 255})
+  });
+  selfserve.auth.onLogin.push(() => 
+  {
+    console.log(selfserve.global.currentUser);
+    if(selfserve.global.currentUser !== undefined && selfserve.global.currentUser.power === 1)
+      $("#shop_cp_icon").show();
+  });
+</script>
+
+</html>

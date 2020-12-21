@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <base href="https://vsatresq.com/">
+  <link rel="stylesheet" href="/css/shop.css">
+
+  <!--Two essential scripts and one non-essential but still fun.-->
+  <script src="node_modules/jquery/dist/jquery.js"></script>
+  <script src="/scripts/selfserve.js"></script>
+  <script src="/scripts/selfserve_blog.js"></script>
+  <script src="/scripts/random_banner.js"></script>
+  <script src="/scripts/selfserve_shop.js"></script>
+</head>
+
+<body>
+  <div class="wrapper">
+    <div class="header_container">
+      <div class="header_logo_container"><a href="./"><img class="header_logo" src="images/logo.svg"></a></div>
+      <div class="header_logo_text_container">
+        <div id='header_logo_text_container' style='width=100%; height=100%'>
+          <h1 class="header_logo_text">PSYCH CAT WEBSTORE</h1>
+        </div>
+      </div>
+    </div>
+
+    <navbar class="custom_nav">
+      <a href="./shop/index.html">
+        <div class="shop_home tooltip">
+          <img src="./images/shop/home.png" class="cart_icon">
+          <span class="tooltiptext">Shop Home</span>
+        </div>
+      </a>
+      <br>
+      <a href="./TESTING/shop/cart.html">
+        <div class="cart tooltip">
+          <img src="./images/shop/empty_cart.png" class="cart_icon">
+          <span class="item_count">0</span>
+          <span class="tooltiptext">View Cart</span>
+        </div>
+      </a>
+      <a href="./shop/shop_cp" id="shop_cp_icon" style="display: none;">
+        <div class="cart tooltip">
+          <img src="./images/shop/cp.png" class="cart_icon">
+          <span class="tooltiptext">Shop Control Panel</span>
+        </div>
+      </a>
+    </navbar>
+
+    <div class="main_content_area">
+      <script>
+    document.title = "Psychcat - Shop";
+    const descSubstring = (inputStr, length) => {
+        if (inputStr.length > length) {
+            return (inputStr.substring(0, length) + "...");
+        }
+        else return inputStr;
+    }
+
+    selfserve.shop.initCompleteFn = () => {
+        $cartItemTemplate = $(".shop_item_container").clone();
+        $('.items_container').html(''); //blank out the cart section.
+
+        if (selfserve.shop.db.length > 0) {
+            selfserve.shop.db.forEach((cartItem, index) => {
+                let $newCartSquare = $cartItemTemplate.clone();
+
+
+                /*$newCartSquare.find('.item_name').html(`<a href="./shop/viewitem.html?item_id=${cartItem._id}">${cartItem.item_name}</a>`);*/
+                $newCartSquare.find('.item_name').html(`<h2>${cartItem.item_name}</h2>`)
+                $newCartSquare.find('.item_description').html(descSubstring(cartItem.description, 30));
+                $newCartSquare.find('.price').html(`<h3>\$${cartItem.price} (${cartItem.currency})</h3>`);
+
+                if (cartItem.images !== undefined && cartItem.images.length > 0)
+                    $newCartSquare.find('.item_image').attr('src', `${cartItem.images[0]}`);
+
+                let outerLink = $("<a></a>").attr('href', `./shop/viewitem.html?item_id=${cartItem._id}`).attr('id', 'shop_item_outerlink');
+                outerLink.append($newCartSquare);
+
+                $('.items_container').append(outerLink);
+            });
+        }
+        else
+        {
+            let errorMessage = $("<div></div>").html("<h3>No shop items</h3><br>Try again later.");
+            $('.items_container').append(errorMessage);
+        }
+    }
+</script>
+
+<div id="items_wrapper">
+    <div class="items_container">
+        <div class="shop_item_container">
+            <div class="item_image_container">
+                <img class="item_image" src="./images/shop/empty_cart.png">
+            </div>
+            <div class="item_name"></div>
+            <div class="price"></div>
+        </div>
+    </div>
+</div>
+
+<!--
+<script>
+    document.title = "Shop - Psych Cat"
+</script>
+
+<div>
+    Coming very soon!
+</div>
+-->
+    </div>
+  </div>
+</body>
+
+<script>
+  selfserve.global.onLoad.push(() => {
+    console.log('Set banner');
+    selfserve.random_banner.setBannerWithGradient("./images/random/shop.png", {r: 255, g: 255, b: 255})
+  });
+  selfserve.auth.onLogin.push(() => 
+  {
+    console.log(selfserve.global.currentUser);
+    if(selfserve.global.currentUser !== undefined && selfserve.global.currentUser.power === 1)
+      $("#shop_cp_icon").show();
+  });
+</script>
+
+</html>

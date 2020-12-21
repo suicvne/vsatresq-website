@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <base href="https://vsatresq.com/"><!--TODO: change this or make it a variable?-->
+  <link rel="stylesheet" href="/css/new_main.css">
+
+  <!--Two essential scripts and one non-essential but still fun.-->
+  <script src="node_modules/jquery/dist/jquery.js"></script>
+  <script src="/scripts/selfserve.js"></script>
+  <script src="/scripts/random_banner.js"></script>
+  <script src="/scripts/logintext_handler.js"></script> <!--TODO: can i make this better at all? 4 scripts???-->
+</head>
+
+<body>
+  <div class="wrapper">
+    <div class="header_container">
+      <div class="selfserve_login_text"><a href="./blog/ucp/">Hide this when not logged in</a></div>
+      <div class="header_logo_container"><a href="./"><img class="header_logo" src="images/logo.svg"></a></div>
+      <div class="header_logo_text_container"><h1 class="header_logo_text">PSYCH CAT</h1></div>
+    </div>
+
+    <navbar class="custom_nav">
+      <a href="./bio">Bio</a>
+      <a href="./blog">Updates</a>
+      <a href="./shop">Shop</a>
+      <div class="dropdown">
+          <a class="droptoggle" href="#">Gallery</a>
+          <div class="dropdown-content">
+            <a href="./gallery/past">Past Events</a>
+            <a href="./gallery/artists">Artists</a>
+            <a href="./gallery/musicians">Musicians</a>
+          </div>
+      </div>
+      <!--<a href="./music">Music</a>-->
+      <!--<a href="./shop">Shop</a>-->
+      <div class="dropdown">
+          <a class="droptoggle" href="#">Contact</a>
+          <div class="dropdown-content">
+            <a href="https://instagram.com/psych.cat/">Instagram</a>
+            <a href="https://www.facebook.com/psychcat/">Facebook</a>
+            <a href="mailto:psychcat666@gmail.com">Email</a>
+          </div>
+      </div>
+
+      <div id="current_user_message" class="right-align">
+        <a href="./auth/ucp"><img src='/images/user.png' style='max-width: 60%; height: auto;'></a>
+      </div>
+    </navbar>
+
+    <div class="main_content_area">
+      <script>
+    document.title = "Updates - Psych Cat"
+
+    selfserve.auth.onLogin.push(() => {
+    });
+
+    const loadingDone = () => {
+        $("#loading").hide();
+        $("#recents_block").show();
+        updateElements();
+    };
+
+    const previewText = (full_message, preview_length) => {
+        if(typeof full_message === typeof String)
+        {
+            if(full_message.length < preview_length) return full_message.substring(0, full_message.length);
+        }
+        return "";
+    };
+
+    const populateRecentPosts = () => {
+        
+        if (selfserve.auth.authSupported === true) {
+            $.get("/blog/getpost?limit=20", (data, status, xhr) => {
+
+                var resultingPosts = JSON.parse((data === undefined ? "" : data));
+                if (resultingPosts !== undefined && resultingPosts.length > 0) {
+                    resultingPosts.sort((a, b) => b.date - a.date);
+                    resultingPosts.forEach(element => {
+                        var div = $("<div>").attr('id', 'blog-post');
+                        var recentsArea = $("#recents-area");
+                        div.html(`<a href="/blog/viewpost.html?id=${element._id}">${element.title}</a><br>${element.author.username} - ${new Date(element.date).toDateString()}<hr>`);
+                        recentsArea.append(div);
+                    });
+                }
+                else $("#recents-area").append($("<div>").html("No posts have been made yet! :("));
+                
+                loadingDone();
+            })
+        }
+        else
+        {
+            $("#recents-area").append($("<div>").html("Internal Server Error"));
+            loadingDone();    
+        }
+
+        
+    };
+
+    const updateElements = () => {
+        if (selfserve.global.currentUser === undefined)
+        {
+            var reminder = $(".loginReminder").html(`Nothing's working? Try <a href='./auth/login.html'>logging in!</a>`);
+        }
+        else {
+            $(".loginReminder").css("display", "none");
+
+            if(selfserve.global.currentUser.power === 1) $(".composeButton").css("display", "block");
+        }
+    };
+
+    selfserve.global.onLoad.push(() => selfserve.random_banner.setBannerWithGradient("./images/random/constellation_entity.jpg", { r: 255, g: 255, b: 255 }));
+    selfserve.global.onLoad.push(() => {
+        populateRecentPosts();
+    });
+    
+    const gotoLogin = () => window.location = './auth/login.html';
+</script>
+
+<div id="landingContainer" style="padding: 2%;">
+    <div id="loading">
+        <h2>Loading, please wait...</h2>
+    </div>
+
+    <div id="recents_block" style="display: none">
+        <div class="loginReminder">
+        </div>
+
+        <div class="composeButton" style="display: none;">
+            <button onclick="window.location.href = './blog/compose';">Compose</button>
+            <button onclick="gotoLogin();">Logout</button>
+        </div>
+        <div id="recents-area">
+            <h3>Recent Updates</h3>
+        </div>
+    </div>
+</div>
+    </div>
+  </div>
+</body>
+
+</html>

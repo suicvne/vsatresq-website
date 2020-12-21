@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <base href="https://vsatresq.com/"><!--TODO: change this or make it a variable?-->
+  <link rel="stylesheet" href="/css/new_main.css">
+
+  <!--Two essential scripts and one non-essential but still fun.-->
+  <script src="node_modules/jquery/dist/jquery.js"></script>
+  <script src="/scripts/selfserve.js"></script>
+  <script src="/scripts/random_banner.js"></script>
+  <script src="/scripts/logintext_handler.js"></script> <!--TODO: can i make this better at all? 4 scripts???-->
+</head>
+
+<body>
+  <div class="wrapper">
+    <div class="header_container">
+      <div class="selfserve_login_text"><a href="./blog/ucp/">Hide this when not logged in</a></div>
+      <div class="header_logo_container"><a href="./"><img class="header_logo" src="images/logo.svg"></a></div>
+      <div class="header_logo_text_container"><h1 class="header_logo_text">PSYCH CAT</h1></div>
+    </div>
+
+    <navbar class="custom_nav">
+      <a href="./bio">Bio</a>
+      <a href="./blog">Updates</a>
+      <a href="./shop">Shop</a>
+      <div class="dropdown">
+          <a class="droptoggle" href="#">Gallery</a>
+          <div class="dropdown-content">
+            <a href="./gallery/past">Past Events</a>
+            <a href="./gallery/artists">Artists</a>
+            <a href="./gallery/musicians">Musicians</a>
+          </div>
+      </div>
+      <!--<a href="./music">Music</a>-->
+      <!--<a href="./shop">Shop</a>-->
+      <div class="dropdown">
+          <a class="droptoggle" href="#">Contact</a>
+          <div class="dropdown-content">
+            <a href="https://instagram.com/psych.cat/">Instagram</a>
+            <a href="https://www.facebook.com/psychcat/">Facebook</a>
+            <a href="mailto:psychcat666@gmail.com">Email</a>
+          </div>
+      </div>
+
+      <div id="current_user_message" class="right-align">
+        <a href="./auth/ucp"><img src='/images/user.png' style='max-width: 60%; height: auto;'></a>
+      </div>
+    </navbar>
+
+    <div class="main_content_area">
+      <script>
+    document.title = "Bio - Psych Cat";
+    selfserve.global.onLoad.push(() => selfserve.random_banner.setBannerWithGradient("../images/random/bio_banner.png", {r: 255, g: 255, b: 255}));
+</script>
+
+<div class="dead_center">
+    <h1>What is "Psych Cat"?</h1>
+    <p>
+        Psych Cat is an experimental platform for creative expression.
+    </p>
+    <p>
+        We are a collective of individuals who seek to open doors within our community by curating art exhibitions, booking tours, and showcasing local talent!
+    </p>
+    <p>
+        From zine releases to pop-up shows, we aim to bring awareness to the wide variety of artistic outlets and souls that make up our Psych Cat World. 
+    </p>
+
+    <img src="../images/bio/pic.jpg" style="max-width: 70%; height: auto"></img>
+</div>
+    </div>
+  </div>
+</body>
+
+</html>

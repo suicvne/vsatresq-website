@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <base href="https://vsatresq.com/">
+  
+  <link rel="stylesheet" href="/css/inventory.css">
+  
+
+  <!--Two essential scripts and one non-essential but still fun.-->
+  <script src="node_modules/jquery/dist/jquery.js"></script>
+  <script src="/scripts/selfserve.js"></script>
+  <script src="/scripts/selfserve_blog.js"></script>
+  <script src="/scripts/selfserve_inventory.js"></script>
+  
+</head>
+
+<body>
+  <div class="wrapper">
+    <navbar class="custom_nav">
+        <a href="./TESTING/inventory">
+        <div class="shop_home tooltip">
+          <img src="./images/icons/home.png" class="cart_icon">
+          <span class="tooltiptext">Inventory Home</span>
+        </div>
+      </a>
+      <a href="javascript:void(0);" onclick="resetNewItemOverlay(); showNewItemOverlay();">
+        <div class="cart tooltip">
+            <img src="./images/icons/add.png" class="cart_icon">
+            <span class="tooltiptext">Add Item to Subdatabase</span>
+        </div>
+      </a>
+      <a href="#" id="shop_cp_icon" style="display: none;">
+        <div class="cart tooltip">
+          <img src="./images/icons/cp.png" class="cart_icon">
+          <span class="tooltiptext">Inventory Control Panel</span>
+        </div>
+      </a>
+      <p>     </p>
+      <div id="subdb_selection">
+          Subdatabase:
+          <select id="subdb_select">
+          </select>
+      </div>
+    </navbar>
+
+    <div class="main_content_area">
+      <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' />
+<link rel="stylesheet" href="/scripts/plugins/image-picker/image-picker.css">
+<script src="/scripts/plugins/image-picker/image-picker.js"></script>
+
+<script src="/scripts/plugins/quagga/quagga.js"></script>
+<script src="/scripts/existing_images.js"></script>
+<script src="/scripts/inventory_ui.js"></script>
+
+<script>
+    selfserve.inventory.initCompleteFn = () => {
+        // $("#peek").text(JSON.stringify(selfserve.inventory.db));
+
+        $("#subdb_select").change((eventData) => {
+            subdbSelectionChanged($("#subdb_select option:selected").val());
+        });
+        populateOptionsWithSubDBs(() => {
+            let potentialDbName = $("#subdb_select option:selected").val();
+
+            if (potentialDbName !== undefined && potentialDbName !== "undefined" && potentialDbName !== "new_subdb") {
+                selfserve.inventory.subdb = potentialDbName;
+                populateItemsFromSubdb(undefined);
+            }
+        });
+    }
+</script>
+
+<div id="inventory_container" style='padding: 1%;'>
+    <div id="new_subdb_overlay" class="overlay">
+        <div id="item_editor_container" data-edit_id="undefined">
+            <h2 id="overlay_header">Create new subdatabase</h2>
+            <form onsubmit="return validateForm()" id="new_item_form">
+                <p id='item_id' style='display: hidden'></p>
+                Subdatabase Name (no spaces):<br>
+                <input type="text" name="subdb_name" id="new_subdb_name" class="fullwidth"><br>
+                <input type="button" value="Create subdatabase" onclick="submitNewSubdb($('#new_subdb_name').val());">
+                <input type="button" value="Cancel" onclick="hideNewSubdbOverlay();">
+            </form>
+        </div>
+    </div>
+
+    <div id="new_item_overlay" class="overlay">
+        <div id="item_editor_container" data-edit_id="undefined">
+            <h2 id="new_item_overlay_header">New Item</h2>
+            <form onsubmit="return validateForm()" id="new_item_form">
+                <p id="new_item_id" style='display: hidden'></p>
+                Item Name:<br>
+                <input type="text" name="item_name" id="new_item_name" class="fullwidth"><br><br>
+                Serial Number:<br>
+                <!--<input type="text" name="item_serial_number" id="new_item_serial" class="fullwidth">-->
+                <div class="input-field">
+                    <!--<label for="new_item_serial">EAN:</label>-->
+                    <input id="new_item_serial" class="isbn" type="text" />
+                    <button type="button" class="icon-barcode button scan"> </button>
+                </div>
+                <br><br>
+                Description (optional):<br>
+                <input type="text" name="item_description" id="new_item_description" class="fullwidth"><br><br>
+                Select images: <input type="file" name="img" multiple onchange="handleFiles(this.files)"><br>
+                <div id="upload_preview"></div>
+                <a href="javascript:void(0);" onclick="showExistingImagesOverlay();">Use existing image(s)</a><br>
+                <input type="button" id="add_new_item_button" value="Add Item" onclick="submitNewItem();">
+                <input type="button" value="Cancel" onclick="hideNewItemOverlay();">
+            </form>
+        </div>
+    </div>
+
+    <div id="existing_images_overlay" class="overlay">
+        <div id="item_editor_container">
+            <input type="button" value="Test Load" onclick="populateExistingImagesList();">
+            <h2>Existing Images</h2>
+
+            <input type="button" value="Confirm Selection" onclick="confirmExistingImagesSelection();">
+            <input type="button" value="Cancel" onclick="hideExistingImagesOverlay();">
+            <div id="dummy_scroll_container">
+                <select id="existing_images_select" multiple="multiple" class="image-picker"></select>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="welcome_message">
+        Welcome to the testing phase of Mike's brand new inventory system!
+
+        Tap the name of any item to view detailed notes about that item.
+    </div>
+
+
+
+    <div style='height: 100%' id="db_container">
+        <!--<textarea style='min-width: 70%; height: auto;' id='peek'></textarea>-->
+        <br>
+        <table id="datatable" style='background-color: #343434; table-layout: fixed; width: 100%'>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Price</th>
+                <th>Image</th>
+            </tr>
+        </table>
+
+    </div>
+</div>
+
+<script src="/scripts/use_barcode.js"></script>
+    </div>
+  </div>
+</body>
+
+<script>
+  selfserve.auth.onLogin.push(() => 
+  {
+    console.log('[INV TEMPLATE]: Current User: ', selfserve.global.currentUser);
+    if(selfserve.global.currentUser !== undefined && selfserve.global.currentUser.power === 1)
+      $("#shop_cp_icon").show();
+  });
+</script>
+
+</html>

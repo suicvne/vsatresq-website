@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <base href="https://vsatresq.com/"><!--TODO: change this or make it a variable?-->
+  <link rel="stylesheet" href="/css/new_main.css">
+
+  <!--Two essential scripts and one non-essential but still fun.-->
+  <script src="node_modules/jquery/dist/jquery.js"></script>
+  <script src="/scripts/selfserve.js"></script>
+  <script src="/scripts/random_banner.js"></script>
+  <script src="/scripts/logintext_handler.js"></script> <!--TODO: can i make this better at all? 4 scripts???-->
+</head>
+
+<body>
+  <div class="wrapper">
+    <div class="header_container">
+      <div class="selfserve_login_text"><a href="./blog/ucp/">Hide this when not logged in</a></div>
+      <div class="header_logo_container"><a href="./"><img class="header_logo" src="images/logo.svg"></a></div>
+      <div class="header_logo_text_container"><h1 class="header_logo_text">PSYCH CAT</h1></div>
+    </div>
+
+    <navbar class="custom_nav">
+      <a href="./bio">Bio</a>
+      <a href="./blog">Updates</a>
+      <a href="./shop">Shop</a>
+      <div class="dropdown">
+          <a class="droptoggle" href="#">Gallery</a>
+          <div class="dropdown-content">
+            <a href="./gallery/past">Past Events</a>
+            <a href="./gallery/artists">Artists</a>
+            <a href="./gallery/musicians">Musicians</a>
+          </div>
+      </div>
+      <!--<a href="./music">Music</a>-->
+      <!--<a href="./shop">Shop</a>-->
+      <div class="dropdown">
+          <a class="droptoggle" href="#">Contact</a>
+          <div class="dropdown-content">
+            <a href="https://instagram.com/psych.cat/">Instagram</a>
+            <a href="https://www.facebook.com/psychcat/">Facebook</a>
+            <a href="mailto:psychcat666@gmail.com">Email</a>
+          </div>
+      </div>
+
+      <div id="current_user_message" class="right-align">
+        <a href="./auth/ucp"><img src='/images/user.png' style='max-width: 60%; height: auto;'></a>
+      </div>
+    </navbar>
+
+    <div class="main_content_area">
+      <script>
+    selfserve.auth.onLogin = () => {
+        if(selfserve.global.currentUser === undefined) // U ain't logged in scrub. Also better do a token and power check too.
+        {
+            window.location = "./auth/login.html";
+        }
+        else
+        {
+            //selfserve.global.currentUser.username
+            $("#username_input").val(selfserve.global.currentUser.username);
+            $("#email_input").val(selfserve.global.currentUser.email);
+            $("#user_avatar").attr('src', `./blog/avatar?username=${selfserve.global.currentUser.username}`);
+        }
+    };
+
+    const validatePassword = () => {
+        let pw = $("#password_confirmation").val();
+        if(pw.length > 0) return pw;
+        else return undefined;
+    };
+
+    const makeChanges = () => {
+        let pw = validatePassword();
+        if(pw === undefined)
+        {
+            $("#password_confirmation").css("border-color", "red");
+            return; 
+        }
+
+        let changes_payload = {};
+
+        let _username = $("#username_input").val();
+        if(_username && _username !== selfserve.global.currentUser.username)
+        {
+            changes_payload["username"] = _username;
+            console.log("username changing");
+        }
+
+        let _email = $("#email_input").val();
+        if(_email && _email !== selfserve.global.currentUser.email)
+        {
+            changes_payload["email"] = _email;
+            console.log("email changing");
+        }
+
+        if(Object.keys(changes_payload).length > 0)
+        {
+            selfserve.auth.editUserInformation(pw, changes_payload, (result, status) => {
+                alert(toString(result), toString(status));
+            });
+        }
+        else
+        {
+            alert('No changes to be made.');
+        }
+    };
+
+    const changeAvatar = () => {
+        let payload = {
+            avatar: `${$("#new_avatar_preview").attr('src')}`,
+            username: selfserve.global.currentUser.username,
+            token: selfserve.auth.getCookie("token")
+        };
+
+        $.post('./blog/changeavatar', payload, (result, status, xhr) => {
+            alert(toString(result), toString(status));
+            //window.location.reload();
+        });
+    };
+
+    const handleFile = (file) => {
+        let preview = $("#new_avatar_preview");
+        if(file === undefined)
+        {
+            preview.hide();
+            $("#change_avatar_button").hide();
+            return;
+        }
+
+        if(!file.type.startsWith("image/")) {alert('Invalid image type.'); return;}
+
+        const reader = new FileReader();
+        reader.onload = (function(aImg) {return function(e) {aImg.attr('src', e.target.result);};})(preview);
+        reader.readAsDataURL(file);
+
+        preview.show();
+        $("#change_avatar_button").show();
+    };
+
+    selfserve.global.onLoad.push(() => selfserve.random_banner.setBannerWithGradient("./images/random/constellation_entity.jpg", { r: 255, g: 255, b: 255 }));
+</script>
+
+<div id="user_cp_container" style="padding: 1%;">
+    <form id="user_cp_form">
+        <img id="user_avatar" width='10%' class="mr-3"></img><br>
+        <label for="new_avatar_input">Change Avatar</label>
+        <input type="file" id="new_avatar_input" name="img" onchange="handleFile(this.files[0])"><br>
+        <img id='new_avatar_preview' width='10%' style='display: none;'><br>
+        <input id="change_avatar_button" type="button" onclick="changeAvatar();" value="Change Avatar" style="display: none;">
+        <hr>
+
+        <label for="username_input">Username:</label><br>
+        <input id="username_input" type="text"><br>
+        <label for="email_input">E-Mail:</label><br>
+        <input id="email_input" type="text"><br><br>
+
+        <label for="password_confirmation">Username changes require a password confirmation.</label><br>
+        <input id="password_confirmation" type="password"><br>
+
+        <input type="button" onclick="makeChanges();" value="Submit">
+    </form>
+</div>
+    </div>
+  </div>
+</body>
+
+</html>

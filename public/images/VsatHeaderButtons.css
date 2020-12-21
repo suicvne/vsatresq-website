@@ -1,0 +1,92 @@
+td img {
+/* Another Mozilla/Netscape bug with making sure our images display correctly */
+	display: block;
+}
+
+#FWTableContainer241744213 {
+/* The master div to make sure that our popup menus get aligned correctly.  Be careful when playing with this one. */
+	position:relative;
+	margin:0px;
+	width:750px;
+	height:290px;
+	text-align:left;
+}
+
+#MMMenuContainer0103134210_0 {
+/* This ID is related to the master menu div for menu MMMenuContainer0103134210_0 and contains the important positioning information for the menu as a whole */
+	position:absolute;
+	left:616px;
+	top:208px;
+	visibility:hidden;
+	z-index:300;
+}
+
+#MMMenu0103134210_0 {
+/* This class defines things about menu MMMenu0103134210_0's div. */
+	position:absolute;
+	left:0px;
+	top:0px;
+	visibility:hidden;
+	background-color:#555555;
+	width:141px;
+	height:48px;
+}
+
+.MMMIFVStyleMMMenu0103134210_0 {
+/* This class determines the general characteristics of the menu items in menu MMMenu0103134210_0 */
+	width:141px;
+	height:24px;
+	voice-family: "\"}\"";
+	voice-family:inherit;
+	width:135px;
+	height:18px;
+}
+
+.MMMIVStyleMMMenu0103134210_0 {
+/* This class determines the general characteristics of the menu items in menu MMMenu0103134210_0 */
+	width:141px;
+	height:24px;
+	voice-family: "\"}\"";
+	voice-family:inherit;
+	width:135px;
+	height:18px;
+}
+
+#MMMenu0103134210_0_Item_0 {
+/* Unique ID for item 0 of menu MMMenu0103134210_0 so we can set its position */
+	left:0px;
+	top:0px;
+}
+
+#MMMenu0103134210_0_Item_1 {
+/* Unique ID for item 1 of menu MMMenu0103134210_0 so we can set its position */
+	left:0px;
+	top:24px;
+}
+
+#MMMenuContainer0103134210_0 img {
+/* needed for Mozilla/Camino/Netscape */
+	border:0px;
+}
+
+#MMMenuContainer0103134210_0 a {
+/* Controls the general apperance for menu MMMenuContainer0103134210_0's items, including color and font */
+	text-decoration:none;
+	font-family:Verdana, Arial, Helvetica, sans-serif;
+	font-size:14px;
+	color:#000000;
+	text-align:left;
+	vertical-align:middle;
+	padding:3px;
+	background: url("mmmenu1_141x24_up.gif") #cccccc;
+	font-weight:normal;
+	font-style:normal;
+	display:block;
+	position:absolute;
+}
+
+#MMMenuContainer0103134210_0 a:hover {
+/* Controls the mouse over effects for menu MMMenuContainer0103134210_0 */
+	color:#ffffff;
+	background: url("mmmenu1_141x24_over.gif") #000084;
+}

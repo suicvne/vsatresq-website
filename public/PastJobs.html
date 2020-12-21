@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <base href="https://vsatresq.com/">
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="icon" type="image/png" href="./favicon.ico" />
+    <script src="node_modules/jquery/dist/jquery.js"></script>
+    <script src="/scripts/selfserve.js"></script>
+    <script src="/scripts/random_banner.js"></script>
+    <script src="/scripts/logintext_handler.js"></script>
+    <!--TODO: can i make this better at all? 4 scripts???-->
+    <title>VSAT ResQ</title>
+</head>
+
+<body>
+    <header class="jumbotron">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="logo-container align-items-center">
+                    <img class="logo-img" src="/images/new_logo.png">
+                </div>
+                <div class="drop_shadow w-100">
+                    <nav class="navbar navbar-expand-md navbar-dark bg-dark w-100">
+                        <button class="navbar-toggler" type="button" data-toggle="collapse"
+                            data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                            <ul class="navbar-nav mr-auto">
+                                <li class="nav-item" id="nav-home">
+                                    <a class="nav-link" href="./index.html">Home <span
+                                            class="sr-only">(current)</span></a>
+                                </li>
+                                <li class="nav-item" id="nav-blog">
+                                    <a class="nav-link" href="./blog">Blog</a>
+                                </li>
+                                <li class="nav-item" id="nav-pastjobs"><a class="nav-link"
+                                        href="./PastJobs.html">Jobs</a></li>
+                                <li class="nav-item" id="nav-about"><a class="nav-link" href="./AboutUs.html">About</a>
+                                </li>
+                                <li class="nav-item dropdown ">
+                                    <!--.disabled-->
+                                    <a class="nav-link dropdown-toggle" id="login-text" role="button"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Login
+                                    </a>
+                                    <!--TODO: fix all these links and make them non-relative. -->
+                                    <div class="dropdown-menu" aria-labelledby="login-text">
+                                        <a class="dropdown-item authorized-only" id="nav-ucp" href="./blog/ucp">User
+                                            Settings</a>
+                                        <a class="dropdown-item authorized-only" id="nav-inventory" href="/inventory">Inventory (Beta)</a>
+                                        <div class="dropdown-divider authorized-only"></div>
+                                        <a class="dropdown-item" href="./blog/login" id="nav-login">Login</a>
+                                    </div>
+                                </li>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="contact-us" role="button"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Contact
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="contact-us">
+                                        <a class="dropdown-item" href="mailto:dispatch@vsatresq.com">Email</a>
+                                        <a class="dropdown-item" href="tel:+13867471525">Phone</a>
+                                        <a class="dropdown-item" href="https://www.facebook.com/VsatResQ/">Facebook</a>
+                                        </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container h-100" id='fluidify-me'>
+        <div class="row h-100 align-items-center">
+            <div id="maincontentarea" class="main_content_area h-100">
+                <script>
+    document.title = "Jobs - VSAT ResQ"
+    $("#nav-pastjobs").addClass("active");
+</script>
+
+<div class="col-md">
+  <h2>Dispatched By</h2>
+  <a href="http://www.ans-sat.com/"><img width='20%' src="https://www.ans-sat.com/layout/logo.png"></a><br><br>
+  <a href="http://www.sateng.com/"><img src="./images/ClientsPartners/seg2.jpg"></a><br><br>
+  <a href="http://www.telesat.ca/default2.asp"><img width=20% src="/images/ClientsPartners/telesat.gif"></a><br><br>
+  <a href="https://diversifiedus.com"><img width=20% src='/images/ClientsPartners/dmg.png'></a><br><br>
+  <a href="https://www.mtn.com/en/Pages/default.aspx"><img width=20% src='/images/ClientsPartners/mtn.jpg'></a>
+  <hr>
+  <h2>Our Clients</h2>
+  <a href='https://www.bankofamerica.com'><img width='30%' src='https://www1.bac-assets.com/homepage/spa-assets/images/assets-images-global-logos-boa-logo-CSXe4b047c0.svg'
+      alternate='bank of America'></a>
+  <div class='vl'></div>
+  <a href='https://www.td.com/us/en/personal-banking/'><img width='20%' src='https://upload.wikimedia.org/wikipedia/commons/1/10/TD_Bank.svg'></a>
+  <div class='vl'></div>
+  <a href='https://www.wellsfargo.com'><img width='30%' src='https://www01.wellsfargomedia.com/assets/images/css/template/homepage/homepage-logo-horz.svg'></a>
+  <br>
+  <a href='https://www.verizon.com/business/'><img width='20%' src='/images/ClientsPartners/verizon.png'></a>
+  <div class='vl'></div>
+  <a href='https://www.xfinity.com'><img width='20%' src='https://upload.wikimedia.org/wikipedia/en/6/65/Xfinity_2017.svg'></a>
+  <div class='vl'></div>
+  <a href='https://www.kroger.com'><img width='20%' src='/images/ClientsPartners/kroger.svg'></a>
+  <br>
+  <a href='https://www.gocoastguard.com'><img width='20%' src='https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/USCG_W.svg/1200px-USCG_W.svg.png'></a>
+  <div class='vl'></div>
+  <a href='https://www.ssa.gov'><img width='20%' src='https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/US-SocialSecurityAdmin-Seal.svg/1200px-US-SocialSecurityAdmin-Seal.svg.png'></a>
+  <div class='vl'></div>
+  <a href='https://www.cdc.gov/'><img width='20%' src='https://assets2.hrc.org/files/images/blog/CDC-Logo-1600x900.jpg'></a>
+  <br>
+
+
+
+  <hr>
+  <h2>Our Experience</h2>
+  <ul>
+    <li>We have restored Internet service for high profile MCI clients after Hurricane Katrina in flooded New
+      Orleans.</li>
+    <li>We installed and maintained equipment at hundreds of locations for FEMA’s Mobile Disaster Relief Centers
+      during the hurricane seasons 2004 and 2005, providing VOIP and VPN.</li>
+    <li>We Installed and commissioned a 3.8 meter mini-hub and five 1.8 meter mobile remotes for restoring
+      electricity after widespread power outages.</li>
+  </ul>
+</div>
+            </div>
+            <!--
+            <div id="sidenav" class="col-2 d-none d-md-block h-100">
+                <h3>Recent Blog Posts</h3>
+                <script>
+                    $.get( "/blog/getpost?limit=5", function( data ) {
+                        var resultingPosts = JSON.parse(data);
+                        resultingPosts.posts.sort(function(a, b){
+                            return b.date - a.date;
+                        });
+                        resultingPosts.posts.forEach(element => {
+                            var div = $("<div>").attr('id', 'sidenav-post');
+                            var sidenav = $("#sidenav");
+                            div.html(`<a href="/blog/viewpost?id=${element.id}">${element.title}</a><br>${element.author} - ${element.date}<hr>`);
+                            sidenav.append(div);
+                        });
+                    });
+                </script>
+            </div>
+            -->
+        </div>
+    </div>
+    <script>
+        try
+        {
+            if(__FLUIDIFY)
+            {
+                console.log('Must fluidify.');
+                $("#fluidify-me").removeClass('container');
+                $("#fluidify-me").addClass('container-fluid');
+            }
+        } catch(e) {}
+    </script>
+
+    <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+</body>
+
+</html>
