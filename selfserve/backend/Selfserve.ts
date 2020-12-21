@@ -19,6 +19,7 @@ let selfserve_config = site_config.selfserve;
 export default class Selfserver {
 
     public port: number = 3000;
+    public backupPort: number = 8000;
 
     private app: express.Application;
     private server: https.Server| http.Server | undefined;
@@ -33,9 +34,10 @@ export default class Selfserver {
         ServiceCalendarBackend.init();
     }
     
-    constructor(_port: number = 3000, _staticDirectory: string = `${process.cwd()}/build/public_html/`) 
+    constructor(_port: number = 3000, _backupPort: number = 8000, _staticDirectory: string = `${process.cwd()}/build/public_html/`) 
     {
         this.port = _port;
+        this.backupPort = _backupPort;
 
         this.app = express();
 
@@ -98,8 +100,8 @@ export default class Selfserver {
             DebugConsole.Write(DebugSeverity.ERROR, 'Failed while reading certificate, key, chain. HTTP Only Mode.');
         }
         
-        this.server = http.createServer(this.app).listen(8000, () => {
-            DebugConsole.Writeq('HTTP backups on 8000')
+        this.server = http.createServer(this.app).listen(this.backupPort, () => {
+            DebugConsole.Writeq('HTTP backups on ' + this.backupPort)
         });
 
 

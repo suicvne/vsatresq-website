@@ -22,7 +22,7 @@ let selfserve_config = require(`${process.cwd()}/../site.config`);
 
 DebugConsole.Writeq(`Our port is ${selfserve_config.selfserve.hostPort}`);
 
-const cms: Selfserve = new Selfserve(selfserve_config.selfserve.hostPort);
+const cms: Selfserve = new Selfserve(selfserve_config.selfserve.hostPort, selfserve_config.selfserve.backupPort);
 
 /**
  * Modify this array to add more routes/endpoints to Express.
