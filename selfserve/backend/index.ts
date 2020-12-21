@@ -55,18 +55,18 @@ const chokidar = require('chokidar');
 
 export function SetupWatchEvents() 
 {
-    chokidar.watch('site.config.js').on('change', (event: any) => {
+    chokidar.watch('../site.config.js').on('change', (event: any) => {
         HandleProjectUpdated(true, event, <string>event);
     });
 
-    chokidar.watch('frontend/').on('change', (event: any, path: any) => {
+    chokidar.watch('../frontend/').on('change', (event: any, path: any) => {
         let file = (<string>event).substring(event.lastIndexOf('/'));
         if(file.startsWith('.') || file === '.DS_Store') return;
 
         HandleProjectUpdated(true, event, <string>event);
     });
 
-    chokidar.watch('selfserve/backend/').on('change', (event: any, path: any) => {
+    chokidar.watch('./backend/').on('change', (event: any, path: any) => {
         HandleProjectUpdated(true, event, <string>event);
     });
 

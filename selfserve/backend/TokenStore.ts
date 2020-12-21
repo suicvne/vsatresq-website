@@ -12,7 +12,7 @@ export default class TokenStore {
     private store: Token[];
     private doppelStore: Token[];
 
-    private saveDirectory: string = `${process.cwd()}/data/user_tokens`;
+    private saveDirectory: string = `${process.cwd()}/../data/user_tokens`;
 
     private static nonce: string | undefined = undefined;
 
@@ -23,7 +23,7 @@ export default class TokenStore {
     constructor() {
         DebugConsole.Writeq('Token Store Constructor is being called!!!!');
 
-        this.saveDirectory = `${process.cwd()}/data/user_tokens`;
+        this.saveDirectory = `${process.cwd()}/../data/user_tokens`;
         DebugConsole.Writeq(`TokenStore Write Directory: ${this.saveDirectory}`);
 
 
@@ -128,7 +128,7 @@ export default class TokenStore {
         token.username = username;
 
         this.store.push(token);
-        this.writeStore(`${process.cwd()}/data/user_tokens/store.json`);
+        this.writeStore(`${this.saveDirectory}/store.json`);
         return token;
     }
 

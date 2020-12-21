@@ -8,7 +8,7 @@
     "build-all": "tsc && npm run-script build",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "mkdir -p ./build/ && node ./scripts/build.js",
-    "serve": "node ./build/selfserve/backend/",
+    "serve": "node ./build/backend/",
     "clean": "rm -rf ./build/",
     "mongo-test-server": "mkdir -p './testing/mongodb/data/db' && mongod --dbpath './testing/mongodb/data/db'"
   },

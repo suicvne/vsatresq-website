@@ -33,11 +33,13 @@ export default class Selfserver {
         ServiceCalendarBackend.init();
     }
     
-    constructor(_port: number = 3000, _staticDirectory: string = "selfserve/build/public_html/") 
+    constructor(_port: number = 3000, _staticDirectory: string = `${process.cwd()}/build/public_html/`) 
     {
         this.port = _port;
 
         this.app = express();
+
+        console.log(`static dir: ${_staticDirectory}`);
         this.app.set('views', _staticDirectory);
 
         this.app.use(bodyParser.json({limit: '50mb'}));
@@ -50,11 +52,11 @@ export default class Selfserver {
             res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type, Authorization');
             next();
         });
-        this.app.use(express.static(_staticDirectory, {index: '/index.html', dotfiles: 'allow'}));
+        this.app.use(express.static(_staticDirectory, {index: 'index.html', dotfiles: 'allow'}));
 
         this.initBackends();
 
-        ServerAuth.tokenStore.loadStore('user_tokens/store.json');
+        ServerAuth.tokenStore.loadStore(`${process.cwd()}/../data/user_tokens/store.json`);
     }
 
     public useRouter(endpoint: string, route: express.Router) {

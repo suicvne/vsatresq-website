@@ -61,12 +61,12 @@
     /* Experimental Options */
     // "experimentalDecorators": true,        /* Enables experimental support for ES7 decorators. */
     // "emitDecoratorMetadata": true,         /* Enables experimental support for emitting type metadata for decorators. */
-    "outDir": "selfserve/build",
+    "outDir": "./build",
     "sourceMap": true,
   },
   "exclude": [
     "ignore/",
-    "selfserve/build/",
+    "build/",
     "public/",
     "site-src/",
     "node_modules/",

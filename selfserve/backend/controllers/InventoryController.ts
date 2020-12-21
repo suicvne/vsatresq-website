@@ -23,9 +23,14 @@ router.get('/get_item', (req: any, res: any) => {
     const _subdb = req.query.subdb;
 
     InventoryBackend.getItemByID(_subdb, oid(__id), (item: IInventoryItem | undefined, err: any) => {
-        if (err) res.status(400).send(err);
+        if (err) 
+        {
+            res.status(400).send(err);
+            return;
+        }
         if (item !== undefined) {
             res.status(200).send(item!);
+            return;
         }
         res.status(401).send('????');
     });
@@ -108,7 +113,7 @@ router.post('/upload_item_image', (req: any, res: any) => {
     let uploadedData = req.body.item_image;
     let extension = req.body.extension;
     let fileName = GenerateRandomName(6);
-    let filePath = `${process.cwd()}/data/inventory/item_images`;
+    let filePath = `${process.cwd()}/../data/inventory/item_images`;
     let fullFilePath = `${filePath}/${fileName}${extension}`;
     let finalURL = `${Endpoint}/item_image?name=${fileName}${extension}`;
     const base64Data = uploadedData.split(',')[1];
@@ -192,7 +197,7 @@ const mime: any = {
 
 router.get('/item_image', (req: any, res: any) => {
     let fileName = req.query.name;
-    let file = `${process.cwd()}/data/inventory/item_images/${fileName}`;
+    let file = `${process.cwd()}/../data/inventory/item_images/${fileName}`;
     let idx = fileName.indexOf('.');
     let type = fileName.substring(++idx);
     console.log(`getting file (${file}) of type ${type}`);
@@ -201,7 +206,7 @@ router.get('/item_image', (req: any, res: any) => {
     if(req.query.res !== undefined)
         sizeDivisor = Number.parseInt(req.query.res);
 
-    let fileAtRes = `${process.cwd()}/data/inventory/item_images/${sizeDivisor}x${fileName}`;
+    let fileAtRes = `${process.cwd()}/../data/inventory/item_images/${sizeDivisor}x${fileName}`;
 
 
 
@@ -263,7 +268,7 @@ router.get('/item_image', (req: any, res: any) => {
 router.get('/existing_images', (req: any, res: any) => {
     // Return
     // List of URLS based on the files existing in the item images directory.
-    let directory = `${process.cwd()}/data/inventory/item_images/`;
+    let directory = `${process.cwd()}/../data/inventory/item_images/`;
     let returning_payload: any = 
     {
         existing_images:[]

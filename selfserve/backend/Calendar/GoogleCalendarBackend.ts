@@ -29,7 +29,7 @@ export abstract class GoogleCalendarBackend
             if(err) return callback(undefined, 'Error retrieving access token: ' + err);
             this.googleOAuthClient.setCredentials(token);
 
-            fs.writeFile(`${process.cwd()}/data/google_token.json`, JSON.stringify(token), (err: any) => {
+            fs.writeFile(`${process.cwd()}/../data/google_token.json`, JSON.stringify(token), (err: any) => {
                 if(err) return console.error(err);
                 console.log('Google Token Stored for Calendar Integration.');
             });
@@ -45,7 +45,7 @@ export abstract class GoogleCalendarBackend
 
         this.googleOAuthClient = new google.auth.OAuth2(client_id, client_secret, redirect_uris);
 
-        fs.readFile(`${process.cwd()}/data/google_token.json`, (err: any, token: any) => {
+        fs.readFile(`${process.cwd()}/../data/google_token.json`, (err: any, token: any) => {
             if(err) 
             {
                 this.getAuthUrl((authUrl: any) => {
