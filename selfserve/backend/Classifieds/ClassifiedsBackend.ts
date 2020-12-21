@@ -3,7 +3,7 @@ import { ObjectID } from "mongodb";
 import {ClassifiedListing, IClassifiedListing} from './ClassifiedListing';
 import { DebugConsole } from "../Debug";
 import { IShopItem } from "../Shop/ShopItem";
-var config = require(`${process.cwd()}/site.config`).selfserve;
+var config = require(`${process.cwd()}/../site.config`).selfserve;
 
 export abstract class ClassifiedsBackend
 {

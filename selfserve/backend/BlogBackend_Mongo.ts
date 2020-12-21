@@ -8,7 +8,7 @@ import { DebugConsole, DebugSeverity } from "./Debug";
 
 import { ObjectId } from 'mongodb';
 
-var config = require(`${process.cwd()}/site.config`).selfserve;
+var config = require(`${process.cwd()}/../site.config`).selfserve;
 
 let crypto = require('crypto'),
     crypto_method = 'aes-256-cbc';

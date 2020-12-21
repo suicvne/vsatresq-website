@@ -6,7 +6,7 @@ import { InventoryItem, IInventoryItem } from "./Inventory/InventoryItem"
 import { DebugConsole } from "./Debug";
 import { Order } from "./Shop/Order";
 
-var config = require(`${process.cwd()}/site.config`).selfserve;
+var config = require(`${process.cwd()}/../site.config`).selfserve;
 
 export abstract class InventoryBackend 
 {

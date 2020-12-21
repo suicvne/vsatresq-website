@@ -12,7 +12,7 @@ import {InventoryBackend} from './InventoryBackend';
 import {GoogleCalendarBackend} from './Calendar/GoogleCalendarBackend';
 import {ServiceCalendarBackend} from './Calendar/ServiceCalendarBackend';
 
-let site_config = require(`${process.cwd()}/site.config`);
+let site_config = require(`${process.cwd()}/../site.config`);
 import { ClassifiedsBackend } from './Classifieds/ClassifiedsBackend';
 let selfserve_config = site_config.selfserve;
 

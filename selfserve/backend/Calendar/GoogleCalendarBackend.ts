@@ -1,7 +1,7 @@
 import { DebugConsole, DebugSeverity } from '../Debug';
 import {google} from 'googleapis';
 import { calendar } from 'googleapis/build/src/apis/calendar';
-let config = require(`${process.cwd()}/site.config`);
+let config = require(`${process.cwd()}/../site.config`);
 let fs = require('fs');
 
 export abstract class GoogleCalendarBackend

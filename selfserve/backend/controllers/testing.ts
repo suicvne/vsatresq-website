@@ -8,7 +8,7 @@ import { ServerAuth, IUser, User, IBlogPost } from '../BlogBackend_Mongo';
 import { MongoDBInstance, MongoDBStatus } from '../MongoRequests'
 import { DebugConsole } from '../Debug';
 
-var config = require(`${process.cwd()}/site.config`).selfserve;
+var config = require(`${process.cwd()}/../site.config`).selfserve;
 
 const router: Router = Router();
 const mongo: MongoDBInstance = new MongoDBInstance(config.default_db);
