@@ -93,11 +93,11 @@ export abstract class GoogleCalendarBackend
 
         calendar.calendarList.list({
             "maxResults": 20
-        }).then((response) => {
+        }).then((response: any) => {
             // console.log(response);
             callback(response.data.items, undefined);
             // callback(response, undefined);
-        }, (error) => {
+        }, (error: any) => {
             callback(undefined, error);
         });
     }
@@ -118,9 +118,9 @@ export abstract class GoogleCalendarBackend
             "maxResults": 200,
             "timeMax": timeMax,
             "timeMin": timeMin
-        }).then((response) => {
+        }).then((response: any) => {
             callback(response.data.items, undefined);
-        }, (error) => {
+        }, (error: any) => {
             callback(undefined, error);
         });
     }

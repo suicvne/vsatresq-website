@@ -54,7 +54,7 @@ export abstract class ServiceCalendarBackend {
     private static mongoBackend: MongoDBInstance;
     public static BackendAvailable: boolean = false;
     private static GCalReflectionID: string | undefined = undefined;
-    private static GCalReflectionIDStorePath: string = `${process.cwd()}/gcalreflectionid`;
+    private static GCalReflectionIDStorePath: string = `${process.cwd()}/data/gcalreflectionid`;
     private static ServiceCalendarCollection: string = "service_calendar";
     
 

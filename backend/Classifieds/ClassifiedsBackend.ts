@@ -10,7 +10,6 @@ export abstract class ClassifiedsBackend
     private static ClassifiedsCollection: string = "classifieds_listings";
     private static mongoBackend: MongoDBInstance;
     public static Available:boolean = false;
-    private static GCalReflectionID: string | undefined = undefined;
 
     public static initBackend()
     {
@@ -23,12 +22,6 @@ export abstract class ClassifiedsBackend
 
 
         });
-    }
-
-    private static loadGCalReflectionID() {
-        let fs = require('fs');
-
-        fs.statSync()
     }
 
     public static getAllListings(callback: (err: any, value: any) => void) {
