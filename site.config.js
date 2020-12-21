@@ -13,7 +13,7 @@ module.exports = {
      * baseURL can be substituted in your template preconfigure your base URL. 
      */
     // baseURL: 'https://vsatresq.com/',
-    baseURL: 'http://localhost:8000/',
+    baseURL: 'http://localhost:8001/',
 
     /**
      * The default layout file name
@@ -26,7 +26,7 @@ module.exports = {
   },
   selfserve: {
     hostPort: 8001,
-    backupHostPort: 8001,
+    backupPort: 8001,
 
     /**MongoDB Credentials */
     username: 'admin',
